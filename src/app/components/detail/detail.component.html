@@ -1,0 +1,66 @@
+<div class="container" style="padding-top: 110px;">
+    <ul class="breadcrumbs">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li (click)="allproduct()">
+            Products
+        </li>
+        <li (click)="onCatClick()">
+            <span>{{category.Title}}</span>
+        </li>
+        <li>{{product.Title}}</li>
+    </ul>
+
+    <mat-grid-list class="product" cols="2" rowHeight="80px">
+        <mat-grid-tile colspan="1" rowspan="5" style="position: relative;">
+            <div class="img_box">
+                <img class="img" src="{{product.imgUrl}}" alt="{{product.Title}}" title="{{product.Title}}">
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+            <div class="q">product name</div>
+            <div class="v">{{product.Title}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+            <div class="q">Category</div>
+            <div class="v">{{category.Title}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+            <div class="q">Price</div>
+            <div class="v">{{product.price}}$</div>
+        </mat-grid-tile>
+        <!-- <mat-grid-tile colspan="1" rowspan="1">
+            <div class="q">Remain</div>
+            <div class="v">{{product.count}}</div>
+        </mat-grid-tile> -->
+        <mat-grid-tile colspan="1" rowspan="1">
+            <button *ngIf="isAuthenticated" mat-raised-button color="accent" (click)="addtoCard(product)">Add to Card</button>
+        </mat-grid-tile>
+
+    </mat-grid-list>
+    <div [innerHTML]="product.Body" class="body_text">
+
+    </div>
+
+
+    <div class="related">
+        <span class="related_title">Related Products</span>
+        <owl-carousel-o class="slider2" [options]="customOptions2" style="position: relative;">
+            <ng-container>
+                <ng-template *ngFor="let item of sliderProduct" class="sale_item" carouselSlide>
+                    <div (click)="goToProduct(item.id)" class="sliderImgBox">
+                        <img src="{{item.imgUrl}}" />
+                    </div>
+                    <div class="title">{{item.Title}}</div>
+                    <div class="price">Price: {{item.price}}$</div>
+                    <button [disabled]="!isAuthenticated" mat-raised-button color="accent" class="add_card" (click)="addtoCard(item)">add to cart</button>
+                </ng-template>
+            </ng-container>
+        </owl-carousel-o>
+    </div>
+
+
+
+
+</div>
