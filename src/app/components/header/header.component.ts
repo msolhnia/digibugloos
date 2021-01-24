@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -10,7 +10,7 @@ import { OrderService } from 'src/app/Service/order.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   cetegoryList: any;//
   badgeHidden: boolean = true;
   badgeCount: number;
@@ -37,8 +37,19 @@ export class HeaderComponent implements OnInit {
     });
 
     this.userSub = this.authService.user.subscribe(user => {
-      this.isAuthenticated = !!user;       
+      this.isAuthenticated = !!user;
     });
+
+    
+    this.authService.isAuthenticated.subscribe(a => {
+      this.isAuthenticated = a;       
+    });
+  }     
+
+
+  ngOnDestroy()
+  {
+    this.userSub.unsubscribe();
   }
 
   getCategory() {

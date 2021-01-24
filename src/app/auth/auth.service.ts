@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
-
 import { User } from './user.model';
+import { Subject } from 'rxjs/internal/Subject';
 
 export interface AuthResponseData {
   kind: string;
@@ -21,7 +21,11 @@ export class AuthService {
   user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  isAuthenticated = new Subject<any>();
+
+  constructor(private http: HttpClient, private router: Router) {
+
+  }
 
   signup(email: string, password: string) {
     return this.http
@@ -42,6 +46,7 @@ export class AuthService {
             resData.idToken,
             +resData.expiresIn
           );
+          this.isAuthenticated.next(true);
         })
       );
   }
@@ -64,12 +69,14 @@ export class AuthService {
             resData.localId,
             resData.idToken,
             +resData.expiresIn
-          );         
+          );  
+          this.isAuthenticated.next(true);       
         })
       );
   }
 
   autoLogin() {
+
     const userData: {
       email: string;
       id: string;
@@ -78,6 +85,10 @@ export class AuthService {
     } = JSON.parse(localStorage.getItem('userData'));
     if (!userData) {
       return;
+    }
+    else
+    {
+      this.isAuthenticated.next(true);
     }
 
     const loadedUser = new User(
@@ -88,10 +99,9 @@ export class AuthService {
     );
 
     if (loadedUser.token) {
+     
       this.user.next(loadedUser);
-      const expirationDuration =
-        new Date(userData._tokenExpirationDate).getTime() -
-        new Date().getTime();
+      const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
     }
   }
@@ -104,6 +114,8 @@ export class AuthService {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.tokenExpirationTimer = null;
+
+    this.isAuthenticated.next(false);
   }
 
   autoLogout(expirationDuration: number) {

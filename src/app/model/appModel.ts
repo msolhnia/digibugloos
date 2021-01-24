@@ -10,6 +10,7 @@ export interface ProductModel {
     Createdate: Date;
 }
 
+
 export interface ProductViewModel {
     id:string;
     Id:string;
@@ -50,3 +51,17 @@ export class searchModel {
         userId:string="";
         items:ProductViewModel[]=[];               
     }
+
+    
+    export class UserProfileModel {        
+        email:string;
+        passWord:string;        
+        id: string;                
+        name: string;
+        lastName:string;        
+        birthDay:Date;
+        address:string;
+        postalCode: string;
+    }
+
+ 

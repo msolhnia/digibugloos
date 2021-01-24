@@ -2,19 +2,24 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { UserProfileModel } from '../model/appModel';
 
 import { AuthService, AuthResponseData } from './auth.service';
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html'
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
   isLoginMode = true;
   isLoading = false;
   error: string = null;
+  UserProfile:UserProfileModel;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    this.UserProfile=new UserProfileModel();
+  }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
