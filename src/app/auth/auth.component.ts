@@ -38,13 +38,12 @@ export class AuthComponent {
     }
 
     authObs.subscribe(
-      resData => {
-        console.log(resData);
+      resData => {        
         this.isLoading = false;
         this.router.navigate(['/']);
       },
       errorMessage => {
-        console.log(errorMessage);
+
         this.error = errorMessage;
         this.isLoading = false;
       }

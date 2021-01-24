@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
       });
 
 
-      this.authService.autoLogin();
+     // this.authService.autoLogin();
   }
 
   getCategory() {
