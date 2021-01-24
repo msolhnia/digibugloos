@@ -21,8 +21,8 @@ export class OrderService {
         this.basket = new basketModel();
     }
 
-    openSnackBar(title: string) {
-        let message = title + " added to card!";
+    openSnackBar(title: string, isAdded:boolean=true) {
+        let message = title + (isAdded)? " added to card!":"";
         this._snackBar.open(message, "ok", {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
@@ -34,7 +34,7 @@ export class OrderService {
     clearBasket() {
         this.basket.items = [];
         this.ordersChanged.next(this.basket);
-        this.openSnackBar("all item has been removed from basket!");
+        this.openSnackBar("all item has been removed from basket!",false);
     }
 
     updateBasket(product: ProductViewModel) {

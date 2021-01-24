@@ -10,23 +10,23 @@
                     <mat-grid-list cols="2" rowHeight="12:1">
                         <mat-grid-tile>
                             <mat-form-field class="auth-field">
-                                <mat-label>email</mat-label>
-                                <input name="email" type="email" matInput required placeholder="email@domain.com">
+                                <mat-label>Username(email)</mat-label>
+                                <input [(ngModel)]="login.email" name="email" type="email" matInput required placeholder="email@domain.com">
                             </mat-form-field>
                         </mat-grid-tile>
 
                         <mat-grid-tile>
                             <mat-form-field class="auth-field">
                                 <mat-label>password</mat-label>
-                                <input name="password" type="password" matInput required placeholder="email@domain.com">
+                                <input [(ngModel)]="login.password" name="password" type="password" matInput required placeholder="******">
                             </mat-form-field>
                         </mat-grid-tile>
                     </mat-grid-list>
 
                     <mat-grid-list cols="2" rowHeight="10:1" style="padding-top: 30px;">
 
-                        <button mat-raised-button style="margin-right: 30px;">reset form</button>
-                        <button mat-raised-button color="primary" [disabled]="!authForm.valid" type="submit">Submit</button>
+                        <button mat-raised-button style="margin-right: 30px;" (click)="onReset()">reset form</button>
+                        <button mat-raised-button color="primary" [disabled]="!authForm.valid" type="submit">Login</button>
 
                     </mat-grid-list>
                 </mat-card>

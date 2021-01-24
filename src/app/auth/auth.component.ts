@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserProfileModel } from '../model/appModel';
+import { loginModel, UserProfileModel } from '../model/appModel';
 
 import { AuthService, AuthResponseData } from './auth.service';
 
@@ -16,8 +16,9 @@ export class AuthComponent {
   isLoading = false;
   error: string = null;
   UserProfile:UserProfileModel;
-
+  login:loginModel;
   constructor(private authService: AuthService, private router: Router) {
+    this.login= new loginModel();
     this.UserProfile=new UserProfileModel();
   }
 
@@ -25,12 +26,20 @@ export class AuthComponent {
     this.isLoginMode = !this.isLoginMode;
   }
 
+
+  onReset()
+  {
+    this.login= new loginModel();
+  }
+
   onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
     }
-    const email = form.value.email;
-    const password = form.value.password;
+
+
+    const email = this.login.email;
+    const password = this.login.password;
 
     let authObs: Observable<AuthResponseData>;
 

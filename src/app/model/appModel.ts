@@ -52,6 +52,11 @@ export class searchModel {
         items:ProductViewModel[]=[];               
     }
 
+
+    export class loginModel {                                  
+        email:string;
+        password:string;               
+    }
     
     export class UserProfileModel {        
         email:string;
