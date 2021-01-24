@@ -21,9 +21,9 @@ export class OrderService {
         this.basket = new basketModel();
     }
 
-    openSnackBar(title: string, isAdded:boolean=true) {
-        let message = title + (isAdded)? " added to card!":"";
-        this._snackBar.open(message, "ok", {
+    openSnackBar(title: string, isAdded:boolean=true) {        
+        let message =  (isAdded)? " added to card!":"";
+        this._snackBar.open(title + message, "ok", {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
             verticalPosition: this.verticalPosition,
