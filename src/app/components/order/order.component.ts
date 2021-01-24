@@ -16,11 +16,13 @@ export class OrderComponent implements OnInit {
     this.basket=new basketModel();
     this.basket=this.orderSrv.basket;    
     
-    this.orderSrv.ordersChanged.subscribe(
-      (basket)=>{        
-        this.totalprice=this.getTotalCost(basket.items);
-      }
-    );
+    // this.orderSrv.ordersChanged.subscribe(
+    //   (basket)=>{        
+    //     this.totalprice=this.getTotalCost(basket.items);
+    //   }
+    // );
+
+    this.totalprice=this.getTotalCost(this.basket.items);
    }
 
    getTotalCost(basketItems) 

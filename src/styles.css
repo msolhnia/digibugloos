@@ -47,6 +47,7 @@ body {
 
 .logo {
     width: 150px;
+    cursor: pointer;
 }
 
 .search_box {

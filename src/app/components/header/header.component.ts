@@ -12,13 +12,13 @@ import { OrderService } from 'src/app/Service/order.service';
 })
 export class HeaderComponent implements OnInit {
   cetegoryList: any;//
-  badgeHidden: boolean = true; 
-  badgeCount:number;
+  badgeHidden: boolean = true;
+  badgeCount: number;
   isAuthenticated = false;
   private userSub: Subscription;
-  
+
   constructor(public fetchData: FetchdataService,
-    private orderSrv:OrderService,
+    private orderSrv: OrderService,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService) {
@@ -26,26 +26,19 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.orderSrv.ordersChanged.subscribe(basket => 
-      {      
-        if(basket.items!= null && basket.items.length>0)
-        {
-          this.badgeCount = basket.items.length;
-          this.badgeHidden=false;          
-        }         
-        else
-        {
-          this.badgeHidden=true;
-        }
-      });
+    this.orderSrv.ordersChanged.subscribe(basket => {
+      if (basket.items != null && basket.items.length > 0) {
+        this.badgeCount = basket.items.length;
+        this.badgeHidden = false;
+      }
+      else {
+        this.badgeHidden = true;
+      }
+    });
 
-      this.userSub = this.authService.user.subscribe(user => {
-        this.isAuthenticated = !!user;
-        console.log(this.isAuthenticated);
-      });
-
-
-     // this.authService.autoLogin();
+    this.userSub = this.authService.user.subscribe(user => {
+      this.isAuthenticated = !!user;       
+    });
   }
 
   getCategory() {
@@ -59,15 +52,18 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/list', id], { relativeTo: this.route });
   }
 
-  logout()
-  {
+  logout() {
     this.authService.logout();
-     this.userSub.unsubscribe();
+    this.userSub.unsubscribe();
     this.router.navigate(['/'], { relativeTo: this.route });
   }
 
-  prepareLogIn()
-  {    
+  prepareLogIn() {
     this.router.navigate(['/auth'], { relativeTo: this.route });
   }
+  goHome()
+  {
+    this.router.navigate(['/'], { relativeTo: this.route });
+  }
+
 }

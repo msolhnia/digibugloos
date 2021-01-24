@@ -1,7 +1,7 @@
 <div class="header">
     <mat-grid-list style="position: relative;" cols="12" rowHeight="60px">
         <mat-grid-tile colspan="2" rowspan="1">
-            <a href="/"><img src="assets/img/logo.svg" class="logo"></a>
+            <img (click)="goHome()" src="assets/img/logo.svg" class="logo">
         </mat-grid-tile>
         <mat-grid-tile colspan="4" rowspan="1">
             <mat-form-field appearance="outline" class="search_box">
