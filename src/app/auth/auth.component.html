@@ -1,90 +1,133 @@
 <div class="container">
     <mat-tab-group>
         <mat-tab label="LogIn">
-            <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+            <form #authForm="ngForm" (ngSubmit)="onLogin(authForm)">
                 <mat-card class="example-card">
                     <b>
             <span>Login Form</span>
           </b>
+                    <div>
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>Email</mat-label>
+                            <input [errorStateMatcher]="emailErrorHandler" #email name="email" [(ngModel)]="login.email" matInput placeholder="Email">
+                            <mat-error *ngIf="emailErrorHandler">
+                                Please enter a valid email address
+                            </mat-error>
+                        </mat-form-field>
 
-                    <mat-grid-list cols="2" rowHeight="12:1">
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field">
-                                <mat-label>Username(email)</mat-label>
-                                <input [(ngModel)]="login.email" name="email" type="email" matInput required placeholder="email@domain.com">
-                            </mat-form-field>
-                        </mat-grid-tile>
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>Password</mat-label>
+                            <input [errorStateMatcher]="passwordErrorHandler" [type]="hide ? 'password' : 'text'" #password name="password" [(ngModel)]="login.password" matInput placeholder="password">
+                            <mat-error *ngIf="passwordErrorHandler">
+                                must be at least 10 character and one or more uppercase letter
+                            </mat-error>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+                        </mat-form-field>
 
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field">
-                                <mat-label>password</mat-label>
-                                <input [(ngModel)]="login.password" name="password" type="password" matInput required placeholder="******">
-                            </mat-form-field>
-                        </mat-grid-tile>
-                    </mat-grid-list>
+                    </div>
 
-                    <mat-grid-list cols="2" rowHeight="10:1" style="padding-top: 30px;">
+                    <div style="padding-top: 30px;">
 
-                        <button mat-raised-button style="margin-right: 30px;" (click)="onReset()">reset form</button>
+                        <button mat-raised-button style="margin-right: 30px;" (click)="onResetLoglin()">reset form</button>
                         <button mat-raised-button color="primary" [disabled]="!authForm.valid" type="submit">Login</button>
 
-                    </mat-grid-list>
+                    </div>
                 </mat-card>
 
             </form>
         </mat-tab>
 
         <mat-tab label="Sign Up">
-            <form #signUpForm="ngForm">
+            <form #signUpForm="ngForm" (ngSubmt)="onSignUp(signUpForm)">
 
                 <mat-card class="example-card">
                     <b>
             <span>Sign up Form</span>
           </b>
+                    <div style="margin-bottom: 50px;">
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>Email</mat-label>
+                            <input [errorStateMatcher]="emailErrorHandler" #email name="email" [(ngModel)]="signup.email" matInput placeholder="Email">
+                            <mat-error *ngIf="emailErrorHandler">
+                                Please enter a valid email address
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>Password</mat-label>
+                            <input [errorStateMatcher]="passwordErrorHandler" [type]="hide ? 'password' : 'text'" #password name="password" [(ngModel)]="signup.password" matInput placeholder="password">
+                            <mat-error *ngIf="passwordErrorHandler">
+                                must be at least 10 character and one or more uppercase letter
+                            </mat-error>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="fill" class="auth-field-signup">
+                            <mat-label>Confirm-Password</mat-label>
+                            <input name="confirm" [errorStateMatcher]="confirmPasswordErrorHandler" [type]="hide ? 'password' : 'text'" matInput required placeholder="Confirm-Password" #confirm ngModel>
+                            <mat-error *ngIf="confirmPasswordErrorHandler">password not match</mat-error>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+                        </mat-form-field>
+
+
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div>
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>Name</mat-label>
+                            <input [errorStateMatcher]="fullNameErrorHandler" #name name="name" [(ngModel)]="UserProfile.name" matInput required placeholder="name">
+                            <mat-error *ngIf="fullNameErrorHandler">
+                                enter string between 5 to 100 character
+                            </mat-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>LastName</mat-label>
+                            <input [errorStateMatcher]="fullNameErrorHandler" #lastname name="lastname" [(ngModel)]="UserProfile.lastName" matInput required placeholder="lastname">
+                            <mat-error *ngIf="fullNameErrorHandler">
+                                enter string between 5 to 100 character
+                            </mat-error>
+                        </mat-form-field>
+
+
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>PostalCode</mat-label>
+                            <input maxlength="10" [errorStateMatcher]="postalCodeErrorHandler" #PostalCode name="postalCode" [(ngModel)]="UserProfile.postalCode" matInput placeholder="PostalCode">
+                            <mat-error *ngIf="postalCodeErrorHandler">
+                                must be 10 digit number
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="auth-field-signup">
+                            <mat-label>birthDay</mat-label>
+                            <input align="left" name="birthDay" [(ngModel)]="UserProfile.birthDay" matInput [matDatepicker]="picker">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="auth-field-signup-full">
+                            <mat-label>Address</mat-label>
+                            <input [errorStateMatcher]="addressErrorHandler" #address name="address" [(ngModel)]="UserProfile.address" matInput placeholder="Address">
+                            <mat-error *ngIf="addressErrorHandler">
+                                address must be between 10 to 100 character
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
                     <mat-grid-list cols="2" rowHeight="12:1">
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field">
-                                <mat-label>Name</mat-label>
-                                <input name="name" [(ngModel)]="UserProfile.name" matInput required placeholder="Name" value="">
-                            </mat-form-field>
-                        </mat-grid-tile>
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field">
-                                <mat-label>lastName</mat-label>
-                                <input name="lastName" [(ngModel)]="UserProfile.lastName" matInput required placeholder="lastName" value="">
-                            </mat-form-field>
-                        </mat-grid-tile>
-
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field">
-                                <mat-label>PostalCode</mat-label>
-                                <input name="PostalCode" [(ngModel)]="UserProfile.postalCode" matInput required placeholder="PostalCode" value="">
-                            </mat-form-field>
-                        </mat-grid-tile>
-
-                        <mat-grid-tile align="left">
-                            <mat-form-field class="auth-field">
-                                <mat-label>birthDay</mat-label>
-                                <input align="left" name="birthDay" [(ngModel)]="UserProfile.birthDay" matInput [matDatepicker]="picker">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
-                        </mat-grid-tile>
-
-                    </mat-grid-list>
-
-                    <mat-grid-list cols="1" rowHeight="12:1">
-                        <mat-grid-tile>
-                            <mat-form-field class="auth-field" style="width: 65%;">
-                                <mat-label>Address</mat-label>
-                                <input name="Address" [(ngModel)]="UserProfile.address" matInput required placeholder="Address" value="">
-                            </mat-form-field>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-                    <mat-grid-list cols="2" rowHeight="12:1">
-
-                        <button mat-raised-button style="margin-right: 30px;">reset form</button>
-                        <button mat-raised-button color="primary">Submit</button>
+                        <button [disabled]="inProgress" mat-raised-button style="margin-right: 30px;" (click)="onResetSignUp()">reset form</button>
+                        <button [disabled]="inProgress" mat-raised-button color="primary" (click)="onSignUp(signUpForm)">Submit</button>
                     </mat-grid-list>
                 </mat-card>
             </form>

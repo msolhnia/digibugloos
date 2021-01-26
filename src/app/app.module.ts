@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
@@ -54,9 +54,11 @@ import { BascketComponent } from './components/bascket/bascket.component';
 import { OrderComponent } from './components/order/order.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
-import { AuthInterceptorService } from './auth/auth-interceptor.service';
- 
-
+import { AuthInterceptorService } from './auth/auth-interceptor.service'; 
+import {AuthService} from './auth/auth.service';
+import { UserTabComponent } from './components/profile/user-tab/user-tab.component';
+import { OrdersTabComponent } from './components/profile/orders-tab/orders-tab.component';
+import { LogoutTabComponent } from './components/profile/logout-tab/logout-tab.component'
 
 @NgModule({
   declarations: [
@@ -70,9 +72,12 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     OrderComponent,
     ProfileComponent,
     AuthComponent,
+    UserTabComponent,
+    OrdersTabComponent,
+    LogoutTabComponent,
   ],
   imports: [
-    FormsModule,
+    FormsModule,ReactiveFormsModule,
     NgxPaginationModule,
     AppRoutingModule,
     HttpClientModule, 
@@ -115,7 +120,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     BrowserModule,
     BrowserAnimationsModule
   ],
-  providers: [FetchdataService,OrderService,
+  providers: [FetchdataService,OrderService, AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: httpInterceptor, multi: true },
     {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptorService,multi: true}
   ],

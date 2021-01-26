@@ -59,14 +59,14 @@ export class searchModel {
     }
     
     export class UserProfileModel {        
-        email:string;
-        passWord:string;        
-        id: string;                
+        email:string;                     
         name: string;
         lastName:string;        
         birthDay:Date;
         address:string;
         postalCode: string;
+        originalName:string;
+        createDate:Date=new Date();
     }
 
  

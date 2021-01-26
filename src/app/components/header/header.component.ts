@@ -1,7 +1,8 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AuthService } from 'src/app/auth/auth.service';
+import { UserProfileModel } from 'src/app/model/appModel';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 import { OrderService } from 'src/app/Service/order.service';
 
@@ -16,6 +17,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   badgeCount: number;
   isAuthenticated = false;
   private userSub: Subscription;
+  private profileSub: Subscription;
+
+  appProfile: UserProfileModel;
+
+
 
   constructor(public fetchData: FetchdataService,
     private orderSrv: OrderService,
@@ -23,6 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService) {
     this.getCategory();
+    this.appProfile = new UserProfileModel();
   }
 
   ngOnInit(): void {
@@ -36,20 +43,43 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
 
+
     this.userSub = this.authService.user.subscribe(user => {
       this.isAuthenticated = !!user;
+      console.log("1");
+      console.log(this.isAuthenticated);
     });
 
-    
     this.authService.isAuthenticated.subscribe(a => {
-      this.isAuthenticated = a;       
+      this.isAuthenticated = a;
+      if (!this.isAuthenticated) { this.appProfile = null; }
+      console.log("2");
     });
-  }     
+
+    this.profileSub = this.authService.appProfile.subscribe(appProfile => {
+      console.log("3");
+      if(appProfile!=null)
+      {
+        this.appProfile = <UserProfileModel>appProfile[0];
+      }      
+    });
+
+    this.authService.username.subscribe(
+      username => {
+        if (username.length) {
+          this.profileSub = this.authService.loadProfile(username).subscribe(appProfile => {
+            this.appProfile = appProfile[0];
+          });
+        }
+      })
+
+  }
 
 
-  ngOnDestroy()
-  {
+  ngOnDestroy() {
     this.userSub.unsubscribe();
+    this.profileSub.unsubscribe();
+    //this.usernameSub.unsubscribe();
   }
 
   getCategory() {
@@ -72,8 +102,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   prepareLogIn() {
     this.router.navigate(['/auth'], { relativeTo: this.route });
   }
-  goHome()
-  {
+  goHome() {
     this.router.navigate(['/'], { relativeTo: this.route });
   }
 

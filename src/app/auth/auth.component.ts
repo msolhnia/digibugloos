@@ -1,10 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormControl, Validators, NgModel, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { loginModel, UserProfileModel } from '../model/appModel';
-
 import { AuthService, AuthResponseData } from './auth.service';
+
+import { ViewChild } from '@angular/core';
+import { Validation } from '../Service/validation.service';
+
 
 @Component({
   selector: 'app-auth',
@@ -12,57 +16,102 @@ import { AuthService, AuthResponseData } from './auth.service';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent {
-  isLoginMode = true;
-  isLoading = false;
+
   error: string = null;
-  UserProfile:UserProfileModel;
-  login:loginModel;
-  constructor(private authService: AuthService, private router: Router) {
-    this.login= new loginModel();
-    this.UserProfile=new UserProfileModel();
+  UserProfile: UserProfileModel;
+  login: loginModel;
+  signup: loginModel;
+  inProgress: boolean;
+  hide = true;
+  confirm: NgModel;
+  password: NgModel;
+
+
+  @ViewChild('signUpForm') public signUpForm: NgForm;
+
+  constructor(
+    private authService: AuthService, private router: Router,
+    private route: ActivatedRoute,    
+    private http: HttpClient) {
+    this.login = new loginModel();
+    this.signup = new loginModel();
+    this.UserProfile = new UserProfileModel();
+
+
   }
 
-  onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
+
+  onResetLoglin() {
+    this.login = new loginModel();
   }
 
 
-  onReset()
-  {
-    this.login= new loginModel();
+  onResetSignUp() {
+    this.UserProfile = new UserProfileModel();
   }
 
-  onSubmit(form: NgForm) {
-    if (!form.valid) {
-      return;
-    }
 
-
-    const email = this.login.email;
-    const password = this.login.password;
-
+  onLogin(form: NgForm) {
+    if (!form.valid) { return; }
     let authObs: Observable<AuthResponseData>;
-
-    this.isLoading = true;
-
-    if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
-    } else {
-      authObs = this.authService.signup(email, password);
-    }
-
+    authObs = this.authService.login(this.login);
     authObs.subscribe(
-      resData => {        
-        this.isLoading = false;
+      resData => {
         this.router.navigate(['/']);
       },
       errorMessage => {
-
         this.error = errorMessage;
-        this.isLoading = false;
       }
     );
-
     form.reset();
   }
+
+
+  onSignUp(form: NgForm) {
+    if (!form.valid) { return; }
+    this.UserProfile.originalName = this.authService.correctUserName(this.signup.email, false);
+    let authObs = this.authService.signup(this.signup, this.UserProfile);
+
+    this.router.navigate(['/'], { relativeTo: this.route });
+  }
+
+
+
+
+
+  fullNameErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.checkLimit(control, 5, 100)
+    }
+
+  postalCodeErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.onlyDigit(control)
+    }
+
+
+  addressErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.checkLimit(control, 20, 200)
+    }
+
+
+  confirmPasswordErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.confirmPassword(control, this.signup.password)
+    }
+
+  emailErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.checkEmail(control)
+    }
+
+
+  passwordErrorHandler =
+    {
+      isErrorState: (control: FormControl) => Validation.checkPassword(control)
+    }
+
+
 }
+

@@ -12,8 +12,21 @@
         </mat-grid-tile>
         <mat-grid-tile colspan="6" rowspan="1">
             <div class="hdr_icon_frame">
+
+                <button class="hdr_btn" mat-icon-button [matMenuTriggerFor]="menu2" *ngIf="isAuthenticated">
+          <mat-icon [matBadgeHidden]="badgeHidden" [matBadge]="badgeCount" matBadgeColor="warn" class="hdr_icon"
+            aria-label="shopping_cart icon">shopping_cart</mat-icon>
+        </button>
+                <mat-menu #menu2="matMenu" xPosition="before" class="basketFrame">
+                    <div *ngIf="isAuthenticated">
+                        <app-bascket></app-bascket>
+                    </div>
+                </mat-menu>
+
+
                 <button class="hdr_btn" mat-icon-button [matMenuTriggerFor]="menu1">
-          <mat-icon class="hdr_icon" aria-label="person_outline icon">person_outline</mat-icon>
+          <span class="userTitle" *ngIf="appProfile!=null">{{appProfile.originalName}}</span>
+          <mat-icon class="hdr_icon" aria-label="account_circle icon">account_circle</mat-icon>
         </button>
                 <mat-menu #menu1="matMenu" xPosition="before">
                     <div *ngIf="isAuthenticated">
@@ -33,20 +46,6 @@
             </button>
                     </div>
                 </mat-menu>
-
-
-                <button class="hdr_btn" mat-icon-button [matMenuTriggerFor]="menu2" *ngIf="isAuthenticated">
-          <mat-icon [matBadgeHidden]="badgeHidden" [matBadge]="badgeCount" matBadgeColor="warn" class="hdr_icon"
-            aria-label="shopping_cart icon">shopping_cart</mat-icon>
-        </button>
-                <mat-menu #menu2="matMenu" xPosition="before" class="basketFrame">
-                    <div *ngIf="isAuthenticated">
-                        <app-bascket></app-bascket>
-                    </div>
-
-                </mat-menu>
-
-
 
 
 
