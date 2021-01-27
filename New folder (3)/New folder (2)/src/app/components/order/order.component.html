@@ -1,0 +1,76 @@
+<div class="container">
+    <mat-card class="example-card">
+
+        <mat-horizontal-stepper linear="true" #stepper>
+            <mat-step>
+                <ng-template matStepLabel>edit items in order</ng-template>
+                <mat-list *ngFor="let item of basket.items">
+                    <mat-list-item class=" basket ">
+                        <img src="{{item.imgUrl}} ">
+                        <div style="width: 150px;overflow: hidden; border-right: 1px solid whitesmoke; ">{{item.Title}}</div>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>count</mat-label>
+                            <input type="number" matInput maxlength="3" min="1" (change)="onCountChanged(countx.value)" #countx [(ngModel)]="item.count">
+                        </mat-form-field>
+                        <div>price:{{item.price* item.count}} $</div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item class=" basket ">
+                        <div>total price={{totalprice}}$</div>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <div align="right ">
+
+                    <button matStepperNext mat-flat-button color="primary" class="mat-primary">
+            next
+            <mat-icon aria-hidden="false" aria-label="keyboard_arrow_right icon">keyboard_arrow_right</mat-icon>
+          </button>
+
+                </div>
+
+            </mat-step>
+
+
+            <mat-step>
+                <ng-template matStepLabel>online payment & set deliver options</ng-template>
+                <div class="orderImgFrame">
+                    <img src="./assets/img/order-step2.jpg">
+                </div>
+
+
+                <div align="right">
+                    <button mat-raised-button matStepperPrevious class="step_btn">
+            <mat-icon aria-hidden="false" aria-label="keyboard_arrow_left icon">keyboard_arrow_left</mat-icon>
+            Back
+          </button>
+
+                    <button matStepperNext mat-flat-button color="primary" class="mat-primary step_btn">
+            next
+            <mat-icon aria-hidden="false " aria-label="keyboard_arrow_right icon">keyboard_arrow_right</mat-icon>
+          </button>
+
+                </div>
+
+
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Save order</ng-template>
+                to complete order processing please press OK button
+                <div align="center ">
+                    <button mat-button matStepperPrevious class="step_btn ">
+            <mat-icon aria-hidden="false " aria-label="keyboard_arrow_left icon ">keyboard_arrow_left</mat-icon>
+            Back
+          </button>
+                    <button mat-button mat-flat-button class="mat-primary" (click)="saveOrder()">
+            <mat-icon aria-hidden="false " aria-label="filter_drama icon ">filter_drama</mat-icon>
+            Save
+          </button>
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
+
+    </mat-card>
+</div>

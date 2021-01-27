@@ -1,0 +1,49 @@
+<div class="container">
+    <ul class="breadcrumbs">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        <li>Products</li>
+    </ul>
+    <mat-grid-list class="product" cols="6" rowHeight="100px">
+        <mat-list class="bk_white">
+            <mat-list-item style="padding-bottom: 30px;">
+                <label>Filter Products : </label>
+                <mat-form-field appearance="fill">
+                    <mat-select (selectionChange)="sortFilter($event.value)" value="-1">
+                        <mat-option value="-1">--Select--</mat-option>
+                        <mat-option value="1">Latest product</mat-option>
+                        <mat-option value="2">cheapest product</mat-option>
+                        <mat-option value="3">expensive product</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <label class="cat_label">Choose Category : </label>
+                <mat-form-field appearance="fill">
+                    <mat-select (selectionChange)="selectCategory($event.value)" [value]="search.cat.toString()">
+                        <mat-option value="-1">--select--</mat-option>
+                        <mat-option *ngFor="let cat of cetegoryList" value="{{cat.Id}}">{{cat.Title}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item class="product_list">
+                <div class="product_list_inner">
+                    <div *ngFor="let product of productList | paginate: config" class="sale_item">
+                        <div (click)="onProductClick(product.id)">
+                            <img src="{{product.imgUrl}}" />
+                            <div class="title">{{product.Title}}</div>
+                            <div class="price">Price: {{product.price}}$</div>
+                        </div>
+                        <button [disabled]="!isAuthenticated" mat-raised-button color="accent" class="add_card" (click)="addtoCard(product,product.id)">add to cart</button>
+                    </div>
+                </div>
+
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <pagination-controls (pageChange)="pageChange($event)" class="float-right"></pagination-controls>
+            </mat-list-item>
+        </mat-list>
+    </mat-grid-list>
+</div>

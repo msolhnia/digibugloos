@@ -1,0 +1,20 @@
+.basket div {
+    float: left;
+    padding: 5px;
+}
+
+.basket img {
+    float: left;
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.orderImgFrame {
+    width: 100%;
+    position: relative;
+    text-align: center;
+}
+
+.orderImgFrame img {
+    height: 300px;
+}

@@ -1,0 +1,73 @@
+<div class="header">
+    <mat-grid-list style="position: relative;" cols="12" rowHeight="60px">
+        <mat-grid-tile colspan="2" rowspan="1">
+            <img (click)="goHome()" src="assets/img/logo.svg" class="logo">
+        </mat-grid-tile>
+        <mat-grid-tile colspan="4" rowspan="1">
+            <mat-form-field appearance="outline" class="search_box">
+                <mat-label>Search in products...</mat-label>
+                <input matInput placeholder="Search in products...">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="6" rowspan="1">
+            <div class="hdr_icon_frame">
+
+                <button class="hdr_btn" mat-icon-button [matMenuTriggerFor]="menu2" *ngIf="isAuthenticated">
+          <mat-icon [matBadgeHidden]="badgeHidden" [matBadge]="badgeCount" matBadgeColor="warn" class="hdr_icon"
+            aria-label="shopping_cart icon">shopping_cart</mat-icon>
+        </button>
+                <mat-menu #menu2="matMenu" xPosition="before" class="basketFrame">
+                    <div *ngIf="isAuthenticated">
+                        <app-bascket></app-bascket>
+                    </div>
+                </mat-menu>
+
+
+                <button class="hdr_btn" mat-icon-button [matMenuTriggerFor]="menu1">
+          <span class="userTitle" *ngIf="appProfile!=null">{{appProfile.originalName}}</span>
+          <mat-icon class="hdr_icon" aria-label="account_circle icon">account_circle</mat-icon>
+        </button>
+                <mat-menu #menu1="matMenu" xPosition="before">
+                    <div *ngIf="isAuthenticated">
+                        <button mat-menu-item (click)="openProfile()">
+              <mat-icon>folder_shared</mat-icon>
+              <span>Profile</span>
+            </button>
+                        <button mat-menu-item (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>LogOut</span>
+            </button>
+                    </div>
+                    <div *ngIf="!isAuthenticated">
+                        <button mat-menu-item (click)="prepareLogIn()">
+              <mat-icon>login</mat-icon>
+              <span>LogIn</span>
+            </button>
+                    </div>
+                </mat-menu>
+
+
+
+            </div>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="2" rowspan="1">
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="6" rowspan="1">
+            <div class="menuFrame">
+                <button mat-button (click)="onMenuClick(-1)">All Products</button>
+                <button mat-button *ngFor="let item of cetegoryList" (click)="onMenuClick(item.Id)">{{item.Title}}</button>
+                <button mat-button>About</button>
+                <button mat-button>Contact us</button>
+            </div>
+
+        </mat-grid-tile>
+        <mat-grid-tile colspan="4" rowspan="1">
+
+        </mat-grid-tile>
+
+    </mat-grid-list>
+</div>

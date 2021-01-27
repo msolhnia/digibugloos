@@ -1,0 +1,335 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+* {
+    font-family: 'Fira Sans';
+}
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.css");
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5Vvl4jL.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.header {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    box-shadow: 0 7px 8px 0 rgba(0, 0, 0, .04);
+    position: fixed;
+    z-index: 1000;
+}
+
+.container {
+    position: relative;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 1350px;
+    margin-top: 120px;
+}
+
+.logo {
+    width: 150px;
+    cursor: pointer;
+}
+
+.search_box {
+    width: 100%;
+}
+
+.mat-form-field-wrapper {
+    margin-top: 25px !important;
+}
+
+.slider1 {
+    position: relative;
+    height: 450px;
+    width: 100%;
+}
+
+.slider1 .owl-item {
+    position: relative;
+    height: 450px !important;
+}
+
+.slider1 .owl-item img {
+    border-radius: 10px;
+    width: 883px !important;
+    height: 100%;
+}
+
+.slider2 .owl-item {
+    /* height: 350px !important;
+    width: 200px !important;
+    position: relative; */
+    background-color: white;
+    border-radius: 8px;
+    max-width: 250px;
+    height: 350px;
+    float: right !important;
+}
+
+.slider2 .owl-item a {
+    text-decoration: none;
+}
+
+.slider2 .owl-item .title {
+    margin-top: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.slider2 .owl-item .price {
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.slider2 .owl-item img {
+    /* height: 100px;*/
+    width: 150px;
+    margin: 0 auto;
+}
+
+.side_img {
+    padding: 10px;
+}
+
+.side_img img {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    border-radius: 15px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.sliderImgBox {
+    width: 100%;
+    height: 140px;
+    padding-top: 20px;
+}
+
+.add_card {
+    color: white;
+    margin: 0 auto !important;
+    display: block !important;
+    position: absolute !important;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+}
+
+.hdr_icon {
+    font-size: 30px;
+    color: #504f4f;
+}
+
+.hdr_icon_frame {
+    text-align: right;
+    width: 100%;
+    padding-right: 100px;
+    cursor: pointer;
+}
+
+.hdr_btn {
+    width: 100px !important;
+    height: 60px !important;
+}
+
+.amazing_box {
+    margin-top: 40px;
+    width: 100%;
+    height: 430px;
+    background-color: #7c6eb0;
+    left: 0;
+    right: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-start,
+.mat-form-field-appearance-outline .mat-form-field-outline-end {
+    border: none !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+    border: none !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: #f0f0f1;
+    border-radius: 15px;
+}
+
+.slider1 .owl-theme .owl-dots,
+.slider1 .owl-theme .owl-nav {
+    margin-top: -30px !important;
+    z-index: 1000;
+    position: relative;
+}
+
+.slider2 .owl-theme .owl-dots,
+.slider2 .owl-theme .owl-nav {
+    top: 150px;
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+}
+
+.owl-next,
+.owl-prev {
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.slider2 .owl-prev {
+    float: left;
+}
+
+.slider2 .owl-next {
+    float: right;
+}
+
+.slider2 .prv {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-image: url(assets/img/nxt.png);
+}
+
+.slider2 .nxt {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-image: url(assets/img/prv.png);
+}
+
+.navi {
+    width: 35px;
+    height: 70px;
+    background-color: white;
+    cursor: pointer;
+    z-index: 100000;
+    /* border: 1px solid black; */
+    box-shadow: 0px 0px 5px #b4b7b5;
+    background-position: center;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+}
+
+.owl-theme .owl-dots .owl-dot.active span,
+.owl-theme .owl-dots .owl-dot:hover span {
+    background: #8386d8 !important;
+}
+
+.owl-stage-outer {
+    z-index: 100;
+}
+
+owl-carousel-o .mat-grid-tile {
+    overflow-y: visible !important;
+}
+
+
+/* Feel free to change duration  */
+
+.animated {
+    -webkit-animation-duration: 1000 ms;
+    animation-duration: 1000 ms;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+
+/* .owl-animated-out - only for current item */
+
+
+/* This is very important class. Use z-index if you want move Out item above In item */
+
+.owl-animated-out {
+    z-index: 1
+}
+
+
+/* .owl-animated-in - only for upcoming item
+/* This is very important class. Use z-index if you want move In item above Out item */
+
+.owl-animated-in {
+    z-index: 0
+}
+
+
+/* .fadeOut is style taken from Animation.css and this is how it looks in owl.carousel.css:  */
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.sale_item img {
+    width: 100%;
+}
+
+.amazing_left {
+    width: 260px;
+    float: left;
+}
+
+.amazing_right {
+    float: right;
+    width: 1085px;
+}
+
+.product .mat-grid-tile .mat-figure {
+    text-align: left;
+    position: relative;
+    display: inline-block;
+    padding: 20px;
+}
+
+.menuFrame {
+    text-align: left;
+    width: 100%;
+    top: -11px;
+    position: relative;
+}
+
+.basketFrame {
+    width: 300px;
+}
