@@ -56,11 +56,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       console.log("2");
     });
 
-    this.profileSub = this.authService.appProfile.subscribe(appProfile => {
-      console.log("3");
+    this.profileSub = this.authService.appProfile.subscribe(appProfile => {           
       if(appProfile!=null)
-      {
-        this.appProfile = <UserProfileModel>appProfile[0];
+      {        
+        if(!<UserProfileModel>appProfile[0])
+        {
+          this.appProfile=appProfile;
+        }
+        else
+        {
+          this.appProfile = <UserProfileModel>appProfile[0];
+        }
       }      
     });
 
@@ -91,6 +97,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onMenuClick(id: number) {
     this.router.navigate(['/list', id], { relativeTo: this.route });
+  }
+
+
+  openProfile()
+  {
+    this.router.navigate(['/profile'], { relativeTo: this.route });
   }
 
   logout() {

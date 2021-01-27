@@ -9,6 +9,7 @@ import { loginModel, UserProfileModel } from '../model/appModel';
 import { Observable } from 'rxjs/internal/Observable';
 
 
+
 export interface AuthResponseData {
   kind: string;
   idToken: string;
@@ -23,11 +24,17 @@ export interface AuthResponseData {
 export class AuthService {
   user = new BehaviorSubject<User>(null);
   appProfile = new Subject<UserProfileModel>();
+  appProfileStatic: UserProfileModel;
   username = new BehaviorSubject<string>("");
   private tokenExpirationTimer: any;
   isAuthenticated = new Subject<any>();
-
+  appUser: any;
   constructor(private http: HttpClient, private router: Router) {
+    this.user.subscribe(
+      (user) => {
+        this.appUser = <User>user;
+      }
+    )
   }
 
 
@@ -40,8 +47,7 @@ export class AuthService {
     return username;
   }
 
-  signup(signup: loginModel, profile: UserProfileModel) 
-  {
+  signup(signup: loginModel, profile: UserProfileModel) {
     return this.http
       .post<AuthResponseData>
       (
@@ -53,15 +59,17 @@ export class AuthService {
         }
       )
       .subscribe(
-        (registerdata) => {
+        (registerdata) => 
+        {
           let username = this.correctUserName(signup.email);
           this.http.post('http://Users/' + username, profile).subscribe(
             (insertProfileData) => {
               let mappedProfile = <UserProfileModel>insertProfileData;
               this.appProfile.next(mappedProfile);
               this.loadProfile(registerdata.email).subscribe(
-                (profile) => {    
-                  this.appProfile.next(profile);                   
+                (profile) => {
+                  this.appProfile.next(profile);
+                  this.appProfileStatic = profile;
                 }
               );
             }
@@ -103,14 +111,29 @@ export class AuthService {
           this.loadProfile(resData.email).subscribe(
             (profile) => {
               this.appProfile.next(profile);
+              this.appProfileStatic = profile;
             }
           )
         })
       );
   }
 
-  autoLogin()
-   {
+  updateProfile() {
+    let username = this.correctUserName((<User>this.appUser).email); 
+    return this.http.delete('http://Users/' + username)
+      .subscribe(
+        () => {          
+          this.http.post('http://Users/' + username, this.appProfileStatic).subscribe(
+            (data) => {
+              this.appProfile.next(this.appProfileStatic)              
+            }
+          )
+        }
+      );
+  }
+
+
+  autoLogin() {
     const userData: {
       email: string;
       id: string;
@@ -118,13 +141,13 @@ export class AuthService {
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
     if (!userData) {
-     
+
       return;
     }
     else {
       this.isAuthenticated.next(true);
     }
-   
+
     const loadedUser = new User(
       userData.email,
       userData.id,
@@ -137,19 +160,20 @@ export class AuthService {
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
 
-     
+
       this.loadProfile(loadedUser.email).subscribe(
-        (profile) => {        
+        (profile) => {
           this.appProfile.next(profile);
+          this.appProfileStatic = profile;
         }
-      )    
+      )
     }
   }
 
   public loadProfile(userName: string): Observable<any> {
     return this.http.get('http://Users/' + this.correctUserName(userName, true))
-      .pipe(      
-        catchError(this.handleError),        
+      .pipe(
+        catchError(this.handleError),
         map(responseData => {
           const postsArray = [];
           for (const key in responseData) {
@@ -158,7 +182,7 @@ export class AuthService {
             }
           }
           return postsArray;
-        },        
+        },
         )
       );
   }
@@ -212,7 +236,7 @@ export class AuthService {
 
       case 'unauthorized':
         errorMessage = 'This login unauthorized';
-        break;        
+        break;
     }
     return throwError(errorMessage);
   }

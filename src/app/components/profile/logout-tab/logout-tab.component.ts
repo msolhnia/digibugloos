@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-logout-tab',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogoutTabComponent implements OnInit {
 
-  constructor() { }
+  constructor( private authService: AuthService) {
+
+   }
 
   ngOnInit(): void {
+  }
+
+  logOut()
+  {
+    this.authService.logout();
   }
 
 }

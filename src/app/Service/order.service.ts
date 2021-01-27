@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
+import { Observable } from "rxjs";
 import { Subject } from "rxjs/internal/Subject";
-import { Subscription } from "rxjs/internal/Subscription";
 import { AuthService } from "../auth/auth.service";
-import { basketModel, ProductModel, ProductViewModel } from "../model/appModel";
+import { User } from "../auth/user.model";
+import { basketModel, orderModel, ProductViewModel } from "../model/appModel";
 import { FetchdataService } from './fetchdata.service'
 
 @Injectable()
@@ -14,9 +15,12 @@ export class OrderService {
     verticalPosition: MatSnackBarVerticalPosition = 'bottom';
     basket: basketModel;//keep all items that added by user to bascket
     ordersChanged = new Subject<any>();
+    orders: Observable<any>;
 
-
-    constructor(private _snackBar: MatSnackBar, private http: HttpClient,
+    constructor(
+        private authService:AuthService,
+        private _snackBar: MatSnackBar, 
+        private http: HttpClient,
         public fetchData: FetchdataService) {
         this.basket = new basketModel();
     }
@@ -65,4 +69,26 @@ export class OrderService {
         this.openSnackBar(product.Title);
        
     }
+
+
+    saveOrder(order:orderModel)
+    {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);         
+        this.http.post('http://Orders/'+username,
+        order
+        ).subscribe(
+            s => console.log(s)
+        );
+    }
+
+
+    getOrders():Observable<any>
+    {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email); 
+        this.orders= this.fetchData.GetDataFromSever("Orders/"+username);
+        return this.orders;
+    }
+
+
+
 }

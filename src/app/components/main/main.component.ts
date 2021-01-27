@@ -108,7 +108,6 @@ export class MainComponent implements OnInit, OnDestroy {
   {
     product.Id=id;    
     this.OrderServise.addToBasket(product);
-
   }
 
 }

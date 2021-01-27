@@ -30,7 +30,7 @@
         </button>
                 <mat-menu #menu1="matMenu" xPosition="before">
                     <div *ngIf="isAuthenticated">
-                        <button mat-menu-item>
+                        <button mat-menu-item (click)="openProfile()">
               <mat-icon>folder_shared</mat-icon>
               <span>Profile</span>
             </button>

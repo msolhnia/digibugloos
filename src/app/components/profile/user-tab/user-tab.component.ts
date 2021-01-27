@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { UserProfileModel } from 'src/app/model/appModel';
@@ -13,37 +14,67 @@ import { Validation } from 'src/app/Service/validation.service';
 })
 export class UserTabComponent implements OnInit {
   UserProfile: UserProfileModel;
-  readonly:boolean=true;
+  readonly: boolean = true;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   constructor(
+    private _snackBar: MatSnackBar,
     private authService: AuthService, private router: Router,
-    private route: ActivatedRoute,    
+    private route: ActivatedRoute,
     private http: HttpClient
-  ) { }
+  ) {
+
+    this.UserProfile = new UserProfileModel();
+  }
 
   ngOnInit(): void {
-    this.UserProfile = new UserProfileModel();
-
     this.authService.appProfile.subscribe(
-      
-      UserProfile=>{this.UserProfile =UserProfile[0];
-        console.log(UserProfile);
+      UserProfile => {
+        if (UserProfile[0]) {
+          this.UserProfile = UserProfile[0];
+        }
       }
     );
+    if (this.authService.appProfileStatic && this.authService.appProfileStatic[0]) {
+      this.UserProfile = this.authService.appProfileStatic[0];
+    }
   }
 
 
-  onSignUp(form: NgForm) {
-    if (!form.valid) { return; }
+  updateProfile() {
+    this.authService.appProfileStatic = this.UserProfile;
+    this.authService.updateProfile();
 
 
-    this.router.navigate(['/'], { relativeTo: this.route });
+    this.authService.appProfile.subscribe(
+      UserProfile => {
+        if (UserProfile[0]) {
+          this.UserProfile = UserProfile[0];
+        }
+      }
+    );
+
+    this.openSnackBar("your profile updated successfuly", false);
+    this.onEditmode();
   }
 
-  onEditmode()
-  {
-    this.readonly=false;
+
+
+  openSnackBar(title: string, isAdded: boolean = true) {
+    let message = (isAdded) ? " added to card!" : "";
+    this._snackBar.open(title + message, "ok", {
+      duration: 5000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
-  
+
+
+
+  onEditmode() {
+    this.readonly = !this.readonly;
+  }
+
 
 
   fullNameErrorHandler =
@@ -74,6 +105,6 @@ export class UserTabComponent implements OnInit {
 
 
 
-    
+
 
 }

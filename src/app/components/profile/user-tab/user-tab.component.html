@@ -1,63 +1,60 @@
-<form #signUpForm="ngForm" (ngSubmt)="onSignUp(signUpForm)">
+<b>
+    <span>{{UserProfile.name}}'s profile</span>                
 
+    <button mat-raised-button style="float: right;" (click)="onEditmode()">
+        Edit
+        <mat-icon  aria-hidden="false" aria-label="create icon">create</mat-icon>
+    </button>
 
-    <b>
-        <span>{{UserProfile.name}}'s profile</span>                
-
-        <button mat-raised-button style="float: right;">
-            Edit
-            <mat-icon (click)="onEditmode()" aria-hidden="false" aria-label="create icon">create</mat-icon>
-        </button>
-
-      </b>
-
-    <div>
-        <mat-form-field appearance="fill" class="auth-field-signup">
-            <mat-label>Name</mat-label>
-            <input [readonly]="readonly" [errorStateMatcher]="fullNameErrorHandler" #name name="name" [(ngModel)]="UserProfile.name" matInput required placeholder="name">
-            <mat-error *ngIf="fullNameErrorHandler">
-                enter string between 5 to 100 character
-            </mat-error>
-        </mat-form-field>
-
-
-        <mat-form-field appearance="fill" class="auth-field-signup">
-            <mat-label>LastName</mat-label>
-            <input [readonly]="readonly" [errorStateMatcher]="fullNameErrorHandler" #lastname name="lastname" [(ngModel)]="UserProfile.lastName" matInput required placeholder="lastname">
-            <mat-error *ngIf="fullNameErrorHandler">
-                enter string between 5 to 100 character
-            </mat-error>
-        </mat-form-field>
+  </b>
 
 
 
-        <mat-form-field appearance="fill" class="auth-field-signup">
-            <mat-label>PostalCode</mat-label>
-            <input [readonly]="readonly" maxlength="10" [errorStateMatcher]="postalCodeErrorHandler" #PostalCode name="postalCode" [(ngModel)]="UserProfile.postalCode" matInput placeholder="PostalCode">
-            <mat-error *ngIf="postalCodeErrorHandler">
-                must be 10 digit number
-            </mat-error>
-        </mat-form-field>
+<div>
+    <mat-form-field appearance="fill" class="auth-field-signup">
+        <mat-label>Name</mat-label>
+        <input [readonly]="readonly" [errorStateMatcher]="fullNameErrorHandler" #name name="name" [(ngModel)]="UserProfile.name" matInput required placeholder="name">
+        <mat-error *ngIf="fullNameErrorHandler">
+            enter string between 5 to 100 character
+        </mat-error>
+    </mat-form-field>
 
-        <mat-form-field appearance="fill" appearance="fill" class="auth-field-signup">
-            <mat-label>birthDay</mat-label>
-            <input [readonly]="readonly" align="left" name="birthDay" [(ngModel)]="UserProfile.birthDay" matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
 
-        <mat-form-field appearance="fill" class="auth-field-signup-full">
-            <mat-label>Address</mat-label>
-            <input [readonly]="readonly" [errorStateMatcher]="addressErrorHandler" #address name="address" [(ngModel)]="UserProfile.address" matInput placeholder="Address">
-            <mat-error *ngIf="addressErrorHandler">
-                address must be between 10 to 100 character
-            </mat-error>
-        </mat-form-field>
+    <mat-form-field appearance="fill" class="auth-field-signup">
+        <mat-label>LastName</mat-label>
+        <input [readonly]="readonly" [errorStateMatcher]="fullNameErrorHandler" #lastname name="lastname" [(ngModel)]="UserProfile.lastName" matInput required placeholder="lastname">
+        <mat-error *ngIf="fullNameErrorHandler">
+            enter string between 5 to 100 character
+        </mat-error>
+    </mat-form-field>
 
-    </div>
-    <mat-grid-list cols="2" rowHeight="12:1">
-        <button *ngIf="!readonly" mat-raised-button style="margin-right: 30px;">reset form</button>
-        <button *ngIf="!readonly" mat-raised-button color="primary">Submit</button>
-    </mat-grid-list>
 
-</form>
+
+    <mat-form-field appearance="fill" class="auth-field-signup">
+        <mat-label>PostalCode</mat-label>
+        <input [readonly]="readonly" maxlength="10" [errorStateMatcher]="postalCodeErrorHandler" #PostalCode name="postalCode" [(ngModel)]="UserProfile.postalCode" matInput placeholder="PostalCode">
+        <mat-error *ngIf="postalCodeErrorHandler">
+            must be 10 digit number
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" appearance="fill" class="auth-field-signup">
+        <mat-label>birthDay</mat-label>
+        <input [readonly]="readonly" align="left" name="birthDay" [(ngModel)]="UserProfile.birthDay" matInput [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="auth-field-signup-full">
+        <mat-label>Address</mat-label>
+        <input [readonly]="readonly" [errorStateMatcher]="addressErrorHandler" #address name="address" [(ngModel)]="UserProfile.address" matInput placeholder="Address">
+        <mat-error *ngIf="addressErrorHandler">
+            address must be between 10 to 100 character
+        </mat-error>
+    </mat-form-field>
+
+</div>
+<mat-grid-list cols="2" rowHeight="12:1">
+    <button *ngIf="!readonly" mat-raised-button style="margin-right: 30px;">reset form</button>
+    <button *ngIf="!readonly" (click)="updateProfile()" type="submit" mat-raised-button color="primary">Submit</button>
+</mat-grid-list>

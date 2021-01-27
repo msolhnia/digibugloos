@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { basketModel } from 'src/app/model/appModel';
+import { basketModel, orderModel, status } from 'src/app/model/appModel';
 import { OrderService } from 'src/app/Service/order.service';
-import { FormsModule } from '@angular/forms';
+
+
+
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -9,34 +11,35 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class OrderComponent implements OnInit {
-  basket:basketModel;
-  totalprice:number=0;
-
-  constructor(private orderSrv:OrderService) {    
-    this.basket=new basketModel();
-    this.basket=this.orderSrv.basket;    
-    
-    // this.orderSrv.ordersChanged.subscribe(
-    //   (basket)=>{        
-    //     this.totalprice=this.getTotalCost(basket.items);
-    //   }
-    // );
-
-    this.totalprice=this.getTotalCost(this.basket.items);
-   }
-
-   getTotalCost(basketItems) 
-   {    
-    return basketItems.reduce((result, item) => item.count * item.price + result, 0); 
+  basket: basketModel;
+  totalprice: number = 0;
+  order: orderModel;
+  constructor(private orderService: OrderService) {
+    this.basket = new basketModel();
+    this.order= new orderModel();
+    this.basket = this.orderService.basket;
+    this.totalprice = this.getTotalCost(this.basket.items);
   }
- 
+
+  getTotalCost(basketItems) {
+    return basketItems.reduce((result, item) => item.count * item.price + result, 0);
+  }
+
   ngOnInit(): void {
 
   }
 
-  onCountChanged(value)
-  {
-    this.totalprice=this.getTotalCost(this.basket.items);
+  onCountChanged(value) {
+    this.totalprice = this.getTotalCost(this.basket.items);
+  }
+
+
+  saveOrder() {
+    //clear nuused data, we don need to body(description) of a product in basket 
+    this.order.items=this.basket.items.map((item)=> {item.Body=""; return item;});
+    this.order.price = this.getTotalCost(this.basket.items);
+    this.order.status = status.received;
+    this.orderService.saveOrder(this.order);
   }
 
 }

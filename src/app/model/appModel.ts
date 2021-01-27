@@ -38,14 +38,25 @@ export class searchModel {
     productTitle:string="";// for searching by title in searchbar
     }
 
-    export interface orderModel {        
-        Id: number;
-        price: string;
-        userId:string;
-        items:ProductModel[];
-        description: string;
-        status:number;
+    //all status about order
+    export enum status {received, accepted, processing, sent, delivered, canceled};
+
+    export class orderModel {               
+        price: string="";       
+        items:ProductModel[]=[];
+        description: string="";
+        status:status=status.received;//we set received by default at initial
     }
+
+
+    export class orderViewModel {               
+        price: string="";       
+        products:string="";
+        description: string="";
+        status:string="";
+        View:string="";
+    }
+
 
     export class basketModel {                                  
         userId:string="";
