@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Subject } from "rxjs/internal/Subject";
 import { AuthService } from "../Service/auth.service"; 
 import { basketModel, orderModel, ProductViewModel,User } from "../model/appModel";
@@ -13,6 +13,7 @@ export class OrderService {
     horizontalPosition: MatSnackBarHorizontalPosition = 'right';
     verticalPosition: MatSnackBarVerticalPosition = 'bottom';
     basket: basketModel;//keep all items that added by user to bascket
+    basket2=new BehaviorSubject<any>(null);//keep all items that added by user to bascket
     basketChanged = new Subject<any>();
     orders: Observable<any>;
 
@@ -36,11 +37,13 @@ export class OrderService {
  
     clearBasket() {
         this.basket.items = [];
-        this.basketChanged.next(this.basket);
+        this.basketChanged.next(this.basket);  
+        this.saveBasket();      
         this.openSnackBar("all item has been removed from basket!",false);
     }
 
     updateBasket(product: ProductViewModel) {
+        
         let updateItem = this.basket.items.find(this.findIndexToUpdate, product.Id);
         let index = this.basket.items.indexOf(updateItem);
         this.basket.items[index].count = product.count;
@@ -53,7 +56,7 @@ export class OrderService {
     }
 
     addToBasket(product: ProductViewModel) {
-        this.saveBasket();
+       
         if (this.basket.items != null && this.basket.items.filter(p => p.Id == product.Id).length) {
             //Update if item exist 
             let item = this.basket.items.filter(p => p.Id == product.Id)[0];
@@ -66,7 +69,8 @@ export class OrderService {
             this.basket.items.push(product);
             this.basketChanged.next(this.basket);
         }
-        this.openSnackBar(product.Title);       
+        this.openSnackBar(product.Title);
+        this.saveBasket();       
     }
 
 

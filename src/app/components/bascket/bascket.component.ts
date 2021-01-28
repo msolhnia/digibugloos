@@ -9,23 +9,27 @@ import { OrderService } from '../../Service/order.service';
   styleUrls: ['./bascket.component.css']
 })
 export class BascketComponent {
-basket:basketModel;
+  basket: basketModel;
 
-  constructor(public orderSrv:OrderService,private router: Router,
-    private route: ActivatedRoute,) 
-    {
-    this.basket=this.orderSrv.basket;
-   }
+  constructor(public orderSrv: OrderService, private router: Router,
+    private route: ActivatedRoute,) {
 
 
-  onClearBasket()
-  {
-    this.orderSrv.clearBasket();    
+    this.orderSrv.basketChanged.subscribe(
+      (basket) => {
+        this.basket = basket;
+      }
+    )
+
   }
 
 
-  onOpenOrder()
-  {
+  onClearBasket() {
+    this.orderSrv.clearBasket();
+  }
+
+
+  onOpenOrder() {
     console.log("order");
     this.router.navigate(['/confirmorder'], { relativeTo: this.route });
   }

@@ -41,6 +41,7 @@ export class OrderComponent implements OnInit {
     this.order.price = this.getTotalCost(this.basket.items);
     this.order.status = status.received;
     this.orderService.saveOrder(this.order);
+    this.orderService.clearBasket();
     this.router.navigate(['/profile'], { relativeTo: this.route });
   }
 
