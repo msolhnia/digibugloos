@@ -53,12 +53,13 @@ import { OrderService } from './Service/order.service';
 import { BascketComponent } from './components/bascket/bascket.component';
 import { OrderComponent } from './components/order/order.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { AuthComponent } from './auth/auth.component';
-import { AuthInterceptorService } from './auth/auth-interceptor.service'; 
-import {AuthService} from './auth/auth.service';
+import { AuthComponent } from './components/auth/auth.component';
+import { AuthInterceptorService } from './Service/auth-interceptor.service'; 
+import { AuthService} from './Service/auth.service';
 import { UserTabComponent } from './components/profile/user-tab/user-tab.component';
 import { OrdersTabComponent } from './components/profile/orders-tab/orders-tab.component';
-import { LogoutTabComponent } from './components/profile/logout-tab/logout-tab.component'
+import { LogoutTabComponent } from './components/profile/logout-tab/logout-tab.component';
+import { DialogComponent } from './components/dialog/dialog.component'
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { LogoutTabComponent } from './components/profile/logout-tab/logout-tab.c
     UserTabComponent,
     OrdersTabComponent,
     LogoutTabComponent,
+    DialogComponent,
   ],
   imports: [
     FormsModule,ReactiveFormsModule,

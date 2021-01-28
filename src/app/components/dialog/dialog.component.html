@@ -1,0 +1,35 @@
+<div class="mat-dialog">
+    <mat-dialog-content>
+        <div *ngIf="isloading" class="loader">
+            <img src="assets/img/loader.gif">
+        </div>
+        Your Order List:<br><br><br>
+        <mat-list *ngFor="let item of productList">
+            <mat-list-item class=" basket ">
+                <img src="{{item.imgUrl}} ">
+                <div style="width: 150px;overflow: hidden; border-right: 1px solid whitesmoke; ">{{item.Title}}</div>
+                <div>count:{{item.count}}</div>
+                <div>price:{{item.price* item.count}} $</div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+        <mat-list>
+            <mat-list-item class=" basket ">
+                <div>Total Price: <b>{{orderList.price}} $</b></div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item class=" basket ">
+                <div>description: <b>{{orderList.description}}</b></div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item class=" basket ">
+                <div>status: <b>{{orderList.status}}</b></div>
+            </mat-list-item>
+        </mat-list>
+
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button color="primary" mat-dialog-close tabindex="-1" (click)="onConfirmClick()">Close</button>
+    </mat-dialog-actions>
+</div>

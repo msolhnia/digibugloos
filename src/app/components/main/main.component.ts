@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { ActivatedRoute,Router} from '@angular/router';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
-import { ProductModel, ProductViewModel, searchModel } from 'src/app/model/appModel';
+import {  ProductViewModel, searchModel } from 'src/app/model/appModel';
 import { OrderService } from 'src/app/Service/order.service';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/Service/auth.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 

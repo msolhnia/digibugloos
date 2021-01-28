@@ -3,9 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
-import { User } from './user.model';
 import { Subject } from 'rxjs/internal/Subject';
-import { loginModel, UserProfileModel } from '../model/appModel';
+import { loginModel, UserProfileModel ,User} from '../model/appModel';
 import { Observable } from 'rxjs/internal/Observable';
 
 

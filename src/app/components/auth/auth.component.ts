@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl, Validators, NgModel, NgForm } from '@angular/forms';
+import { FormControl, NgModel, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { loginModel, UserProfileModel } from '../model/appModel';
-import { AuthService, AuthResponseData } from './auth.service';
+
+import { AuthService, AuthResponseData } from 'src/app/Service/auth.service';
 
 import { ViewChild } from '@angular/core';
-import { Validation } from '../Service/validation.service';
+import { Validation } from 'src/app/Service/validation.service';
+import { UserProfileModel, loginModel } from 'src/app/model/appModel';
 
 
 @Component({

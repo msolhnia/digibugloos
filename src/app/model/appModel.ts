@@ -41,9 +41,10 @@ export class searchModel {
     //all status about order
     export enum status {received, accepted, processing, sent, delivered, canceled};
 
-    export class orderModel {               
+    export class orderModel { 
+        id:string="";
         price: string="";       
-        items:ProductModel[]=[];
+        items:ProductViewModel[]=[];
         description: string="";
         status:status=status.received;//we set received by default at initial
     }
@@ -54,7 +55,7 @@ export class searchModel {
         products:string="";
         description: string="";
         status:string="";
-        View:string="";
+        View:string[][]=[];        
     }
 
 
@@ -79,5 +80,23 @@ export class searchModel {
         originalName:string;
         createDate:Date=new Date();
     }
+
+
+    export class User {
+        constructor(
+          public email: string,
+          public id: string,
+          private _token: string,
+          private _tokenExpirationDate: Date
+        ) {}
+      
+        get token() {
+          if (!this._tokenExpirationDate || new Date() > this._tokenExpirationDate) {
+            return null;
+          }
+          return this._token;
+        }
+      }
+      
 
  

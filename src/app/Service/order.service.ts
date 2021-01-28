@@ -3,9 +3,8 @@ import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
 import { Observable } from "rxjs";
 import { Subject } from "rxjs/internal/Subject";
-import { AuthService } from "../auth/auth.service";
-import { User } from "../auth/user.model";
-import { basketModel, orderModel, ProductViewModel } from "../model/appModel";
+import { AuthService } from "../Service/auth.service"; 
+import { basketModel, orderModel, ProductViewModel,User } from "../model/appModel";
 import { FetchdataService } from './fetchdata.service'
 
 @Injectable()

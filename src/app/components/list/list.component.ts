@@ -1,7 +1,7 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/Service/auth.service';
 import { ProductViewModel, searchModel } from 'src/app/model/appModel';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 import { OrderService } from 'src/app/Service/order.service';

@@ -1,10 +1,13 @@
 
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { orderModel, orderViewModel, status } from 'src/app/model/appModel';
 import { OrderService } from 'src/app/Service/order.service';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component'
+
 
 @Component({
   selector: 'app-orders-tab',
@@ -19,7 +22,7 @@ export class OrdersTabComponent implements  AfterViewInit {
 
   @ViewChild('MatPaginator') paginator: MatPaginator;
   dataSource: any;
-  constructor(private orderService: OrderService) {
+  constructor(private orderService: OrderService,private dialog: MatDialog) {
     this.DynamicColumns();  
   } 
 
@@ -36,10 +39,21 @@ export class OrdersTabComponent implements  AfterViewInit {
           orderView.description=order.description;
           orderView.status=st[order.status];
           let itemList:string="";
+          let itemIdList:string[][]=[];
           order.items.forEach(product => {
             itemList += product.Title+"("+product.count+"),";
           });
           orderView.products=itemList;
+
+
+          order.items.forEach(product => {
+            let str:string[]=[];
+            str.push(product.id);
+            str.push(product.count);
+            itemIdList.push(str);
+          });
+
+          orderView.View=itemIdList;
           this.orderViews.push(orderView);
         });
  
@@ -73,9 +87,18 @@ export class OrdersTabComponent implements  AfterViewInit {
   }
 
 
+   
   viewDetail(data:any)
-  {
-console.log(data);
+   {
+    const dialogRef = this.dialog.open(DialogComponent,{
+      data:{
+        list: data,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+     // console.log(result);
+    });
   }
 
 }

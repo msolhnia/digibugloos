@@ -24,7 +24,6 @@
 }
 
 :host /deep/ .mat-tab-labels .mat-tab-label-active {
-    box-shadow: 0px 0px 5px red;
     background: #7c6eb0;
     color: white;
     border-top-left-radius: 5px;

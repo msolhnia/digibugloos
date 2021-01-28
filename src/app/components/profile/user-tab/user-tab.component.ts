@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/Service/auth.service';
 import { UserProfileModel } from 'src/app/model/appModel';
 import { Validation } from 'src/app/Service/validation.service';
 

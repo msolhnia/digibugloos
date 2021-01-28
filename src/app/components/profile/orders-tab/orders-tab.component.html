@@ -6,7 +6,10 @@
                 <ng-container *ngIf="column.header == 'View'">
                     <mat-icon (click)="viewDetail(row)" aria-hidden="false" aria-label="visibility icon">visibility</mat-icon>
                 </ng-container>
-                {{ column.cell(row,column.header) }} </td>
+                <ng-container *ngIf="column.header != 'View'">
+                    {{ column.cell(row,column.header) }}
+                </ng-container>
+            </td>
         </ng-container>
     </ng-container>
 
