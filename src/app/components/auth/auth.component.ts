@@ -26,7 +26,7 @@ export class AuthComponent {
   hide = true;
   confirm: NgModel;
   password: NgModel;
-
+  isLoading=false;
 
   @ViewChild('signUpForm') public signUpForm: NgForm;
 
@@ -53,6 +53,7 @@ export class AuthComponent {
 
 
   onLogin(form: NgForm) {
+
     if (!form.valid) { return; }
     let authObs: Observable<AuthResponseData>;
     authObs = this.authService.login(this.login);

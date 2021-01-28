@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -12,10 +12,11 @@ import { OrderService } from 'src/app/Service/order.service';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit, OnDestroy {
+export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
   search: searchModel;
   product: any;
   sliderProduct: any;
+  isloading=true;
   category: CategoryModel;
   paramsSubscription: Subscription;
   isAuthenticated = false;
@@ -88,8 +89,8 @@ export class DetailComponent implements OnInit, OnDestroy {
   getSliderProducts(catId: string) {
     let sliderSearch = new searchModel();
     sliderSearch.cat = Number(catId);
-    this.fetchData.filterProducts(sliderSearch).subscribe(products => {
-      this.sliderProduct = products;
+    this.fetchData.filterProducts(sliderSearch).subscribe(products => {      
+      this.sliderProduct = products;      
     }
     );
   }
@@ -106,6 +107,13 @@ export class DetailComponent implements OnInit, OnDestroy {
   addtoCard(product:ProductViewModel)
   { 
     this.OrderServise.addToBasket(product);
+  }
+
+
+
+  ngAfterViewChecked()
+  {
+    this.isloading=false;
   }
 
 }

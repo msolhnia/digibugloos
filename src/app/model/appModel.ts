@@ -59,8 +59,7 @@ export class searchModel {
     }
 
 
-    export class basketModel {                                  
-        userId:string="";
+    export class basketModel {                                         
         items:ProductViewModel[]=[];               
     }
 

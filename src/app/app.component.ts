@@ -1,6 +1,7 @@
 
 import { OnInit ,Component} from '@angular/core';
 import { AuthService } from './Service/auth.service';
+import { OrderService } from './Service/order.service';
 
 
 
@@ -12,11 +13,19 @@ import { AuthService } from './Service/auth.service';
 export class AppComponent implements OnInit {
   title = 'digibugloos';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private orderService:OrderService) {}
 
   
-  ngOnInit() {
-    this.authService.autoLogin();    
+  ngOnInit() {    
+    this.authService.autoLogin(); 
+    this.authService.loadbasket.subscribe(
+      (loadbasket)=>{
+      if(loadbasket)
+      {
+        this.orderService.getBasket();
+      }                
+      }
+    ) 
   } 
 
 }

@@ -7,13 +7,13 @@ import { AuthService } from "../Service/auth.service";
 import { basketModel, orderModel, ProductViewModel,User } from "../model/appModel";
 import { FetchdataService } from './fetchdata.service'
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class OrderService {
 
     horizontalPosition: MatSnackBarHorizontalPosition = 'right';
     verticalPosition: MatSnackBarVerticalPosition = 'bottom';
     basket: basketModel;//keep all items that added by user to bascket
-    ordersChanged = new Subject<any>();
+    basketChanged = new Subject<any>();
     orders: Observable<any>;
 
     constructor(
@@ -33,10 +33,10 @@ export class OrderService {
         });
     }
 
-
+ 
     clearBasket() {
         this.basket.items = [];
-        this.ordersChanged.next(this.basket);
+        this.basketChanged.next(this.basket);
         this.openSnackBar("all item has been removed from basket!",false);
     }
 
@@ -44,7 +44,8 @@ export class OrderService {
         let updateItem = this.basket.items.find(this.findIndexToUpdate, product.Id);
         let index = this.basket.items.indexOf(updateItem);
         this.basket.items[index].count = product.count;
-        this.ordersChanged.next(this.basket);
+        this.basketChanged.next(this.basket);
+        this.saveBasket();
     }
 
     findIndexToUpdate(newItem) {
@@ -52,6 +53,7 @@ export class OrderService {
     }
 
     addToBasket(product: ProductViewModel) {
+        this.saveBasket();
         if (this.basket.items != null && this.basket.items.filter(p => p.Id == product.Id).length) {
             //Update if item exist 
             let item = this.basket.items.filter(p => p.Id == product.Id)[0];
@@ -62,11 +64,9 @@ export class OrderService {
             //add if item exist not exist
             product.count = "1";
             this.basket.items.push(product);
-            this.ordersChanged.next(this.basket);
+            this.basketChanged.next(this.basket);
         }
-
-        this.openSnackBar(product.Title);
-       
+        this.openSnackBar(product.Title);       
     }
 
 
@@ -88,6 +88,30 @@ export class OrderService {
         return this.orders;
     }
 
+    saveBasket()
+    {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);  
+        this.http.delete('http://Baskets/'+username
+        ).subscribe(
+            ()=>
+            {
+                this.http.post('http://Baskets/'+username, this.basket
+                ).subscribe(
+                    s => console.log(s)
+                );
+            }
+        );        
+    }
 
+    getBasket() 
+    {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email); 
+        this.fetchData.GetDataFromSever("Baskets/"+username).subscribe
+        ((basket)=>{
+            this.basket=basket[0];   
+            this.basketChanged.next(this.basket);   
+            console.log( this.basket) ;     
+        });        
+    }
 
 }

@@ -321,6 +321,7 @@ owl-carousel-o .mat-grid-tile {
     position: relative;
     display: inline-block;
     padding: 20px;
+    min-height: 300px;
 }
 
 .menuFrame {

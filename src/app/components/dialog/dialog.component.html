@@ -1,8 +1,6 @@
 <div class="mat-dialog">
     <mat-dialog-content>
-        <div *ngIf="isloading" class="loader">
-            <img src="assets/img/loader.gif">
-        </div>
+        <app-loader [isloading]="isloading"></app-loader>
         Your Order List:<br><br><br>
         <mat-list *ngFor="let item of productList">
             <mat-list-item class=" basket ">

@@ -14,6 +14,7 @@
 
     <mat-grid-list class="product" cols="2" rowHeight="80px">
         <mat-grid-tile colspan="1" rowspan="5" style="position: relative;">
+            <app-loader [isloading]="isloading"></app-loader>
             <div class="img_box">
                 <img class="img" src="{{product.imgUrl}}" alt="{{product.Title}}" title="{{product.Title}}">
             </div>
@@ -37,11 +38,13 @@
         <mat-grid-tile colspan="1" rowspan="1">
             <button *ngIf="isAuthenticated" mat-raised-button color="accent" (click)="addtoCard(product)">Add to Card</button>
         </mat-grid-tile>
-
     </mat-grid-list>
-    <div [innerHTML]="product.Body" class="body_text">
-
+    <div style="position: relative;">
+        <app-loader [isloading]="isloading"></app-loader>
+        <div [innerHTML]="product.Body" class="body_text">
+        </div>
     </div>
+
 
 
     <div class="related">

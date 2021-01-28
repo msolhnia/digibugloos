@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.orderSrv.ordersChanged.subscribe(basket => {
+    this.orderSrv.basketChanged.subscribe(basket => {
       if (basket.items != null && basket.items.length > 0) {
         this.badgeCount = basket.items.length;
         this.badgeHidden = false;
@@ -45,15 +45,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
     this.userSub = this.authService.user.subscribe(user => {
-      this.isAuthenticated = !!user;
-      console.log("1");
-      console.log(this.isAuthenticated);
+      this.isAuthenticated = !!user;   
     });
 
     this.authService.isAuthenticated.subscribe(a => {
       this.isAuthenticated = a;
-      if (!this.isAuthenticated) { this.appProfile = null; }
-      console.log("2");
+      if (!this.isAuthenticated) { this.appProfile = null; console.log("profile is null") }
     });
 
     this.profileSub = this.authService.appProfile.subscribe(appProfile => {           
@@ -74,18 +71,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       username => {
         if (username.length) {
           this.profileSub = this.authService.loadProfile(username).subscribe(appProfile => {
-            this.appProfile = appProfile[0];
+            this.appProfile = appProfile[0]; 
           });
         }
       })
-
   }
 
 
   ngOnDestroy() {
     this.userSub.unsubscribe();
     this.profileSub.unsubscribe();
-    //this.usernameSub.unsubscribe();
   }
 
   getCategory() {

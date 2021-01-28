@@ -6,7 +6,7 @@ import { throwError, BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { loginModel, UserProfileModel ,User} from '../model/appModel';
 import { Observable } from 'rxjs/internal/Observable';
-
+ 
 
 
 export interface AuthResponseData {
@@ -27,7 +27,9 @@ export class AuthService {
   username = new BehaviorSubject<string>("");
   private tokenExpirationTimer: any;
   isAuthenticated = new Subject<any>();
+  loadbasket= new BehaviorSubject<boolean>(false);
   appUser: any;
+  //, private orderService:OrderService
   constructor(private http: HttpClient, private router: Router) {
     this.user.subscribe(
       (user) => {
@@ -140,7 +142,7 @@ export class AuthService {
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
     if (!userData) {
-
+      this.logout();
       return;
     }
     else {
@@ -158,8 +160,8 @@ export class AuthService {
       this.user.next(loadedUser);
       const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
-
-
+      //this.orderService.getBasket();
+      this.checkUnauthorized(loadedUser.email);
       this.loadProfile(loadedUser.email).subscribe(
         (profile) => {
           this.appProfile.next(profile);
@@ -169,11 +171,33 @@ export class AuthService {
     }
   }
 
+  public checkUnauthorized(userName: string) 
+  {
+    return this.http.get('http://Users/' +this.correctUserName(userName, true))
+    .subscribe(
+      (data)=>{ 
+        if(!data)
+        {
+          console.log(data) ;
+        this.isAuthenticated.next(false);
+        this.appProfile.next(null);
+        this.appProfileStatic=null;        
+        this.logout();
+      }
+      else
+      {
+        this.loadbasket.next(true);
+      }
+      }                               
+    );
+  }
+
   public loadProfile(userName: string): Observable<any> {
     return this.http.get('http://Users/' + this.correctUserName(userName, true))
       .pipe(
-        catchError(this.handleError),
-        map(responseData => {
+       catchError(this.handleError)        
+        ,
+        map(responseData => {         
           const postsArray = [];
           for (const key in responseData) {
             if (responseData.hasOwnProperty(key)) {
@@ -183,12 +207,12 @@ export class AuthService {
           return postsArray;
         },
         )
-      );
+      )
   }
 
   logout() {
     this.user.next(null);
-    this.router.navigate(['/auth']);
+    //this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -220,9 +244,10 @@ export class AuthService {
   private handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.error || !errorRes.error.error) {
+      console.log("ddfdf");
       return throwError(errorMessage);
     }
-    switch (errorRes.error.error.message) {
+    switch (errorRes.error.error) {
       case 'EMAIL_EXISTS':
         errorMessage = 'This email exists already';
         break;
@@ -234,8 +259,18 @@ export class AuthService {
         break;
 
       case 'unauthorized':
+        
         errorMessage = 'This login unauthorized';
         break;
+
+
+      case 'Auth token is expired':
+        errorMessage = 'please login again';
+       
+        break;
+
+
+        
     }
     return throwError(errorMessage);
   }
