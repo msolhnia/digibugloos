@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Search } from '../Model/Search';
-import { AuthService } from "./auth.service"; 
+import { authService } from "./auth.service"; 
 
 @Injectable()
-export class FetchdataService {
+export class fetchDataService {
   
     allProducts: Observable<any> = this.getDataFromServer("Product"); //get all products from server       
     allCategory: Observable<any> = this.getDataFromServer("Category"); //get all Categories from server       
     
-    constructor(private http: HttpClient,  private authService:AuthService,) {           
+    constructor(private http: HttpClient,  private authService:authService) {           
     }
 
     public refreshProduct() {

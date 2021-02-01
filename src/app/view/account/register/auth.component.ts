@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormControl, NgModel, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService} from 'src/app/service/auth.service';
+import { authService} from 'src/app/service/auth.service';
 import { ViewChild } from '@angular/core';
 import { Validation } from 'src/app/validation/validation.service';
 import { UserProfile } from 'src/app/Model/UserProfile';
@@ -31,7 +31,7 @@ export class AuthComponent {
   @ViewChild('signUpForm') public signUpForm: NgForm;
 
   constructor(
-    private authService: AuthService, private router: Router,
+    private authService: authService, private router: Router,
     private route: ActivatedRoute,    
     private http: HttpClient) {
     this.login = new Login();

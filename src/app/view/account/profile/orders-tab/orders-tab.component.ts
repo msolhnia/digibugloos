@@ -3,11 +3,11 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { OrderService } from 'src/app/service/order.service';
+import { orderService } from 'src/app/service/order.service';
 import { DialogComponent } from 'src/app/view/account/profile/orders-tab/orderDetails/dialog.component'
 import { Order } from 'src/app/Model/Order';
 import { OrderView } from 'src/app/Model/OrderView';
-import { AuthService } from 'src/app/service/auth.service';
+import { authService } from 'src/app/service/auth.service';
 import { OrderStatus } from 'src/app/Model/OrderStatus';
 
 
@@ -24,8 +24,8 @@ export class OrdersTabComponent  {
 
   @ViewChild('MatPaginator') paginator: MatPaginator;
   dataSource: any;
-  constructor(private orderService: OrderService,private dialog: MatDialog,
-    private authService: AuthService) {
+  constructor(private orderService: orderService,private dialog: MatDialog,
+    private authService: authService) {
     this.DynamicColumns();  
 
     this.orderService.orderChanged.subscribe(

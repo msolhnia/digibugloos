@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { OrderView } from 'src/app/Model/OrderView';
 import { Search } from 'src/app/Model/Search';
-import { FetchdataService } from 'src/app/service/fetchData.service';
+import { fetchDataService } from 'src/app/service/fetchData.service';
 
 @Component({
   selector: 'app-dialog',
@@ -15,7 +14,8 @@ isloading:Boolean=true;
   productList: any;
   search: Search;
   orderList: OrderView;
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,private dialogRef: MatDialogRef<DialogComponent>, public fetchData: FetchdataService) {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+  private dialogRef: MatDialogRef<DialogComponent>, public fetchData: fetchDataService) {
 
     this.orderList = new OrderView();
     this.search= new Search();

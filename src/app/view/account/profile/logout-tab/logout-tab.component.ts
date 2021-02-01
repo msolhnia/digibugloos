@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/service/auth.service';
+import { authService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-logout-tab',
@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class LogoutTabComponent {
 
-  constructor( private authService: AuthService) { }
+  constructor( private authService: authService) { }
   
   logOut()
   {

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserProfile } from 'src/app/Model/UserProfile';
-import { AuthService } from 'src/app/service/auth.service';
+import { alertService } from 'src/app/service/alert.service';
+import { authService } from 'src/app/service/auth.service';
 import { Validation } from 'src/app/validation/validation.service';
 
 @Component({
@@ -15,11 +15,10 @@ import { Validation } from 'src/app/validation/validation.service';
 export class UserTabComponent {
   UserProfile: UserProfile;
   readonly: boolean = true;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
   constructor(
-    private _snackBar: MatSnackBar,
-    private authService: AuthService, private router: Router,
+    private alertService: alertService,
+    private authService: authService, private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient
   ) {
@@ -58,27 +57,13 @@ export class UserTabComponent {
 
   updateProfile() {
     this.authService.updateProfile(this.UserProfile);
-    this.openSnackBar("your profile updated successfuly", false);
+    this.alertService.openSnackBar("your profile updated successfuly", false);
     this.onEditmode();
   }
 
-
-
-  openSnackBar(title: string, isAdded: boolean = true) {
-    let message = (isAdded) ? " added to card!" : "";
-    this._snackBar.open(title + message, "ok", {
-      duration: 5000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-  }
-
-
-
-  onEditmode() {
+   onEditmode() {
     this.readonly = !this.readonly;
   }
-
 
 
   fullNameErrorHandler =

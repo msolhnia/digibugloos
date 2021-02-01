@@ -3,9 +3,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Search } from 'src/app/Model/Search';
 import { ProductView } from 'src/app/Interface/ProductView';
-import { AuthService } from 'src/app/service/auth.service';
-import { FetchdataService } from 'src/app/service/fetchData.service';
-import { OrderService } from 'src/app/service/order.service';
+import { authService } from 'src/app/service/auth.service';
+import { fetchDataService } from 'src/app/service/fetchData.service';
+import { orderService } from 'src/app/service/order.service';
+import { basketService } from 'src/app/service/basket.service';
  
 @Component({
   selector: 'app-list',
@@ -20,8 +21,8 @@ export class ListComponent implements OnInit, OnDestroy{
   paramsSubscription:Subscription;
   isAuthenticated = false;
   private userSub: Subscription;
-  constructor(public fetchData: FetchdataService, private route: ActivatedRoute, private OrderServise:OrderService,
-    private router: Router,private authService: AuthService) 
+  constructor(public fetchData: fetchDataService, private route: ActivatedRoute, private basketService:basketService,
+    private router: Router,private authService: authService) 
   {
     this.config = {
       currentPage: 1,
@@ -123,7 +124,7 @@ export class ListComponent implements OnInit, OnDestroy{
   addtoCard(product:ProductView, id:string)
   {
     product.Id=id;    
-    this.OrderServise.addToBasket(product);
+    this.basketService.addToBasket(product);
 
   }
 

@@ -2,14 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-
-import { AppComponent } from './view/app/firstPage/app.component';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './routing/app-routing.module'; 
-import { HeaderComponent } from './view/app/header/header.component';
-import { MainComponent } from './view/app/firstPage/main/main.component';
-import { ListComponent } from './view/app/product/productList/list.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CarouselModule } from 'ngx-owl-carousel-o';// slider
+
+
+//+++++material++++++++++++
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -45,22 +43,34 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatIconModule} from '@angular/material/icon';
 
-import { NgxPaginationModule } from 'ngx-pagination';
-import { FetchdataService } from 'src/app/service/fetchData.service';
-import { httpInterceptor } from './interceptor/httpInterceptor';
-import { OrderService } from './service/order.service';
+//+++++component++++++++++++
+import { AppRoutingModule } from './routing/app-routing.module'; 
+import { AppComponent } from './view/app/firstPage/app.component';
+import { HeaderComponent } from './view/app/header/header.component';
+import { MainComponent } from './view/app/firstPage/main/main.component';
+import { ListComponent } from './view/app/product/productList/list.component';
 import { BascketComponent } from './view/account/basket/bascket.component';
 import { OrderComponent } from './view/account/order/order.component';
 import { ProfileComponent } from './view/account/profile/profile.component';
 import { AuthComponent } from './view/account/register/auth.component';
-import { AuthInterceptorService } from './interceptor/authInterceptor'; 
-import { AuthService} from './service/auth.service';
 import { UserTabComponent } from './view/account/profile/user-tab/user-tab.component';
 import { OrdersTabComponent } from './view/account/profile/orders-tab/orders-tab.component';
 import { LogoutTabComponent } from './view/account/profile/logout-tab/logout-tab.component';
 import { DialogComponent } from './view/account/profile/orders-tab/orderDetails/dialog.component';
-import { LoaderComponent } from './view/shared/loader/loader.component'
+import { LoaderComponent } from './view/shared/loader/loader.component';
 import { DetailComponent } from './view/app/product/productDetail/detail.component';
+
+//++++++interceptor+++++++++
+import { httpInterceptor } from './interceptor/httpInterceptor';
+import { authInterceptorService } from './interceptor/authInterceptor'; 
+
+//++++++services++++++++++++
+import { authService} from './service/auth.service';
+import { fetchDataService } from './service/fetchData.service';
+import { orderService } from './service/order.service';
+import { basketService } from './service/basket.service';
+import { alertService } from './service/alert.service';
+
 
 @NgModule({
   declarations: [
@@ -124,9 +134,9 @@ import { DetailComponent } from './view/app/product/productDetail/detail.compone
     BrowserModule,
     BrowserAnimationsModule
   ],
-  providers: [FetchdataService,OrderService, AuthService,
+  providers: [fetchDataService,orderService, authService, basketService,alertService,
     { provide: HTTP_INTERCEPTORS, useClass: httpInterceptor, multi: true },
-    {provide: HTTP_INTERCEPTORS,useClass: AuthInterceptorService,multi: true}
+    {provide: HTTP_INTERCEPTORS,useClass: authInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

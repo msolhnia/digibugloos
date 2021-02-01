@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { UserProfile } from 'src/app/Model/UserProfile';
-import { AuthService } from 'src/app/service/auth.service';
-import { FetchdataService } from 'src/app/service/fetchData.service';
-import { OrderService } from 'src/app/service/order.service';
+import { authService } from 'src/app/service/auth.service';
+import { basketService } from 'src/app/service/basket.service';
+import { fetchDataService } from 'src/app/service/fetchData.service';
 
 @Component({
   selector: 'app-header',
@@ -22,17 +22,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   profile: UserProfile;
 
 
-  constructor(public fetchData: FetchdataService,
-    private orderSrv: OrderService,
+  constructor(public fetchData: fetchDataService,
+    private basketService: basketService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService) {
+    private authService: authService) {
     this.getCategory();
     this.profile = new UserProfile();
   }
 
   ngOnInit(): void {
-    this.orderSrv.basketChanged.subscribe(basket => {
+    this.basketService.basketChanged.subscribe(basket => {
       if (basket != null && basket.items != null && basket.items.length > 0) {
         this.badgeCount = basket.items.length;
         this.badgeHidden = false;

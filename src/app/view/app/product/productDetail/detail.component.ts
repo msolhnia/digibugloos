@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { Search } from 'src/app/Model/Search';
 import { Category } from 'src/app/Interface/Category';
 import { ProductView } from 'src/app/Interface/ProductView';
-import { AuthService } from 'src/app/service/auth.service';
-import { FetchdataService } from 'src/app/service/fetchData.service';
-import { OrderService } from 'src/app/service/order.service';
+import { authService } from 'src/app/service/auth.service';
+import { fetchDataService } from 'src/app/service/fetchData.service';
+import { orderService } from 'src/app/service/order.service';
+import { basketService } from 'src/app/service/basket.service';
 
 @Component({
   selector: 'app-detail',
@@ -43,8 +44,8 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
     }
   }
 
-  constructor(private route: ActivatedRoute, private router: Router, public fetchData: FetchdataService,
-    private OrderServise:OrderService,    private authService: AuthService) {
+  constructor(private route: ActivatedRoute, private router: Router, public fetchData: fetchDataService,
+    private basketService:basketService, private authService: authService) {
     this.search = new Search();
   }
 
@@ -107,7 +108,7 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   addtoCard(product:ProductView)
   { 
-    this.OrderServise.addToBasket(product);
+    this.basketService.addToBasket(product);
   }
 
   ngAfterViewChecked()

@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { ActivatedRoute,Router} from '@angular/router';
-import { FetchdataService } from 'src/app/service/fetchData.service';
-import { OrderService } from 'src/app/service/order.service';
-import { AuthService } from 'src/app/service/auth.service';
+import { fetchDataService } from 'src/app/service/fetchData.service';
+import { authService } from 'src/app/service/auth.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Search } from 'src/app/Model/Search';
 import { ProductView } from 'src/app/Interface/ProductView';
-
-
+import { basketService } from 'src/app/service/basket.service';
 
 @Component({
   selector: 'app-main',
@@ -63,9 +61,9 @@ export class MainComponent implements OnInit, OnDestroy {
 
   constructor(private route:ActivatedRoute,
     private router:Router,
-    public fetchData: FetchdataService,
-    private OrderServise:OrderService,
-    private authService: AuthService
+    public fetchData: fetchDataService,
+    private basketService: basketService,
+    private authService: authService
     ) {
     this.getSliderProducts();
    }
@@ -104,7 +102,7 @@ export class MainComponent implements OnInit, OnDestroy {
   addtoCard(product:ProductView, id:string)
   {
     product.Id=id;    
-    this.OrderServise.addToBasket(product);
+    this.basketService.addToBasket(product);
   }
 
 }

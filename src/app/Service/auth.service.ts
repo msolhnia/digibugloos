@@ -12,8 +12,7 @@ import { AuthResponseData } from '../Interface/AuthResponseData';
 
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
-
+export class authService {
   user = new BehaviorSubject<User>(null);
   profile = new BehaviorSubject<UserProfile>(null); 
   username = new BehaviorSubject<string>("");

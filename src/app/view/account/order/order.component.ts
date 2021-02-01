@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Basket } from 'src/app/Model/Basket';
 import { Order } from 'src/app/Model/Order';
 import { OrderStatus } from 'src/app/Model/OrderStatus';
-import { OrderService } from 'src/app/service/order.service';
-
-
+import { basketService } from 'src/app/service/basket.service';
+import { orderService } from 'src/app/service/order.service';
 
 @Component({
   selector: 'app-order',
@@ -17,10 +16,10 @@ export class OrderComponent implements OnInit {
   basket: Basket;
   totalprice: number = 0;
   order: Order;
-  constructor(private orderService: OrderService,private route: ActivatedRoute, private router: Router) {
+  constructor(private orderService: orderService,private basketService: basketService,private route: ActivatedRoute, private router: Router) {
     this.basket = new Basket();
     this.order= new Order();
-    this.basket = this.orderService.basket;
+    this.basket = this.basketService.basket;
     this.totalprice = this.getTotalCost(this.basket.items);
   }
 
@@ -43,7 +42,7 @@ export class OrderComponent implements OnInit {
     this.order.price = this.getTotalCost(this.basket.items);
     this.order.status = OrderStatus.received;    
     this.orderService.saveOrder(this.order);
-    this.orderService.clearBasket();
+    this.basketService.clearBasket();
     this.router.navigate(['/profile'], { relativeTo: this.route });
   }
 

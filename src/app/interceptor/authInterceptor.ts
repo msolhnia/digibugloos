@@ -7,11 +7,11 @@ import {
 } from '@angular/common/http';
 import { take, exhaustMap } from 'rxjs/operators';
 
-import { AuthService } from '../service/auth.service';
+import { authService } from '../service/auth.service';
 
 @Injectable()
-export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+export class authInterceptorService implements HttpInterceptor {
+  constructor(private authService: authService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     return this.authService.user.pipe(

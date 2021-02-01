@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Basket } from 'src/app/Model/Basket';
-import { OrderService } from '../../../service/order.service';
+import { basketService } from 'src/app/service/basket.service';
 
 @Component({
   selector: 'app-bascket',
@@ -11,10 +11,10 @@ import { OrderService } from '../../../service/order.service';
 export class BascketComponent {
   basket: Basket;
 
-  constructor(public orderSrv: OrderService, private router: Router,
+  constructor(public basketService: basketService, private router: Router,
     private route: ActivatedRoute,) {
 
-    this.orderSrv.basketChanged.subscribe(
+    this.basketService.basketChanged.subscribe(
       (basket) => {
         this.basket = basket;
       }
@@ -22,7 +22,7 @@ export class BascketComponent {
   }
 
   onClearBasket() {
-    this.orderSrv.clearBasket();
+    this.basketService.clearBasket();
   }
 
 

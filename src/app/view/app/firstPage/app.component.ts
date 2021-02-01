@@ -1,9 +1,7 @@
 
 import { OnInit ,Component} from '@angular/core';
-import { AuthService } from '../../../service/auth.service';
-import { OrderService } from '../../../service/order.service';
-
-
+import { authService } from '../../../service/auth.service';
+import { orderService } from '../../../service/order.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +11,7 @@ import { OrderService } from '../../../service/order.service';
 export class AppComponent implements OnInit {
   title = 'digibugloos';
 
-  constructor(private authService: AuthService, private orderService:OrderService) {}
-
+  constructor(private authService: authService, private orderService:orderService) {}
   
   ngOnInit() {    
     this.authService.autoLogin(); 
