@@ -5,10 +5,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
 import { Observable } from 'rxjs/internal/Observable';
-import { User } from '../model/classes/User';
-import { UserProfile } from '../model/classes/UserProfile';
-import { Login } from '../model/classes/Login';
-import { AuthResponseData } from '../model/interfaces/AuthResponseData';
+import { User } from '../Model/User';
+import { UserProfile } from '../Model/UserProfile';
+import { Login } from '../Model/Login';
+import { AuthResponseData } from '../Interface/AuthResponseData';
 
 
 @Injectable({ providedIn: 'root' })

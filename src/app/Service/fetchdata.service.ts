@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Search } from '../model/classes/Search';
-import { AuthService } from "../Service/auth.service"; 
+import { Search } from '../Model/Search';
+import { AuthService } from "./auth.service"; 
 
 @Injectable()
 export class FetchdataService {

@@ -2,12 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from "rxjs";
-import { Basket } from "../model/classes/Basket";
-import { Order } from "../model/classes/Order";
-import { User } from "../model/classes/User";
-import { ProductView } from "../model/interfaces/ProductView";
-import { AuthService } from "../Service/auth.service";
-import { FetchdataService } from './fetchdata.service'
+import { Basket } from "../Model/Basket";
+import { Order } from "../Model/Order";
+import { User } from "../Model/User";
+import { ProductView } from "../Interface/ProductView";
+import { AuthService } from "./auth.service";
+import { FetchdataService } from './fetchData.service'
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {

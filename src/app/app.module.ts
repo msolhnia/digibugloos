@@ -3,14 +3,13 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './view/app/firstPage/app.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module'; 
-import { HeaderComponent } from './components/header/header.component';
-import { MainComponent } from './components/main/main.component';
-import { DetailComponent } from './components/detail/detail.component';
-import { ListComponent } from './components/list/list.component';
+import { AppRoutingModule } from './routing/app-routing.module'; 
+import { HeaderComponent } from './view/app/header/header.component';
+import { MainComponent } from './view/app/firstPage/main/main.component';
+import { ListComponent } from './view/app/product/productList/list.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
@@ -47,20 +46,21 @@ import {MatTreeModule} from '@angular/material/tree';
 import {MatIconModule} from '@angular/material/icon';
 
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FetchdataService } from 'src/app/Service/fetchdata.service';
-import { httpInterceptor } from './Service/httpInterceptor';
-import { OrderService } from './Service/order.service';
-import { BascketComponent } from './components/bascket/bascket.component';
-import { OrderComponent } from './components/order/order.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { AuthComponent } from './components/auth/auth.component';
-import { AuthInterceptorService } from './Service/auth-interceptor.service'; 
-import { AuthService} from './Service/auth.service';
-import { UserTabComponent } from './components/profile/user-tab/user-tab.component';
-import { OrdersTabComponent } from './components/profile/orders-tab/orders-tab.component';
-import { LogoutTabComponent } from './components/profile/logout-tab/logout-tab.component';
-import { DialogComponent } from './components/dialog/dialog.component';
-import { LoaderComponent } from './components/loader/loader.component'
+import { FetchdataService } from 'src/app/service/fetchData.service';
+import { httpInterceptor } from './interceptor/httpInterceptor';
+import { OrderService } from './service/order.service';
+import { BascketComponent } from './view/account/basket/bascket.component';
+import { OrderComponent } from './view/account/order/order.component';
+import { ProfileComponent } from './view/account/profile/profile.component';
+import { AuthComponent } from './view/account/register/auth.component';
+import { AuthInterceptorService } from './interceptor/authInterceptor'; 
+import { AuthService} from './service/auth.service';
+import { UserTabComponent } from './view/account/profile/user-tab/user-tab.component';
+import { OrdersTabComponent } from './view/account/profile/orders-tab/orders-tab.component';
+import { LogoutTabComponent } from './view/account/profile/logout-tab/logout-tab.component';
+import { DialogComponent } from './view/account/profile/orders-tab/orderDetails/dialog.component';
+import { LoaderComponent } from './view/shared/loader/loader.component'
+import { DetailComponent } from './view/app/product/productDetail/detail.component';
 
 @NgModule({
   declarations: [
