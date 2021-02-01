@@ -18,14 +18,6 @@ export class AppComponent implements OnInit {
   
   ngOnInit() {    
     this.authService.autoLogin(); 
-    this.authService.loadbasket.subscribe(
-      (loadbasket)=>{
-      if(loadbasket)
-      {
-        this.orderService.getBasket();
-      }                
-      }
-    ) 
   } 
 
 }

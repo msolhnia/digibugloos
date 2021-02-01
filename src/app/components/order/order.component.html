@@ -6,8 +6,8 @@
                 <ng-template matStepLabel>edit items in order</ng-template>
                 <mat-list *ngFor="let item of basket.items">
                     <mat-list-item class=" basket ">
-                        <img src="{{item.imgUrl}} ">
-                        <div style="width: 150px;overflow: hidden; border-right: 1px solid whitesmoke; ">{{item.Title}}</div>
+                        <img src="{{item.imageUrl}} ">
+                        <div style="width: 150px;overflow: hidden; border-right: 1px solid whitesmoke; ">{{item.title}}</div>
                         <mat-form-field class="example-full-width">
                             <mat-label>count</mat-label>
                             <input type="number" matInput maxlength="3" min="1" (change)="onCountChanged(countx.value)" #countx [(ngModel)]="item.count">

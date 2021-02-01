@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { UserProfile } from 'src/app/model/classes/UserProfile';
 import { AuthService } from 'src/app/Service/auth.service';
-import { UserProfileModel } from 'src/app/model/appModel';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 import { OrderService } from 'src/app/Service/order.service';
 
@@ -19,8 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
   private profileSub: Subscription;
 
-  appProfile: UserProfileModel;
-
+  profile: UserProfile;
 
 
   constructor(public fetchData: FetchdataService,
@@ -29,12 +28,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService) {
     this.getCategory();
-    this.appProfile = new UserProfileModel();
+    this.profile = new UserProfile();
   }
 
   ngOnInit(): void {
     this.orderSrv.basketChanged.subscribe(basket => {
-      if (basket.items != null && basket.items.length > 0) {
+      if (basket != null && basket.items != null && basket.items.length > 0) {
         this.badgeCount = basket.items.length;
         this.badgeHidden = false;
       }
@@ -45,24 +44,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
     this.userSub = this.authService.user.subscribe(user => {
-      this.isAuthenticated = !!user;   
+      this.isAuthenticated = !!user; 
+      console.log("fire");  
+      console.log(this.isAuthenticated);  
+
+      if (!this.isAuthenticated) { this.profile = null; console.log("this appProfile is null");   }
     });
 
     this.authService.isAuthenticated.subscribe(a => {
       this.isAuthenticated = a;
-      if (!this.isAuthenticated) { this.appProfile = null; console.log("profile is null") }
+      if (!this.isAuthenticated) { this.profile = null; console.log("this appProfile is null");   }
     });
 
-    this.profileSub = this.authService.appProfile.subscribe(appProfile => {           
-      if(appProfile!=null)
+    this.profileSub = this.authService.profile.subscribe(profile => {           
+      if(profile!=null)
       {        
-        if(!<UserProfileModel>appProfile[0])
+        if(!<UserProfile>profile[0])
         {
-          this.appProfile=appProfile;
+          this.profile=profile;
         }
         else
         {
-          this.appProfile = <UserProfileModel>appProfile[0];
+          this.profile = <UserProfile>profile[0];
         }
       }      
     });
@@ -71,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       username => {
         if (username.length) {
           this.profileSub = this.authService.loadProfile(username).subscribe(appProfile => {
-            this.appProfile = appProfile[0]; 
+            this.profile = appProfile[0]; 
           });
         }
       })
@@ -97,8 +100,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openProfile()
   {
-    this.router.navigate(['/profile'], { relativeTo: this.route });
+    //this.router.navigate(['/profile'], { relativeTo: this.route });
+    this.redirectTo('/profile');
   }
+
+  redirectTo(uri:string){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    this.router.navigate([uri]));
+ }
 
   logout() {
     this.authService.logout();

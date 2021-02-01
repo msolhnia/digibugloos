@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { ActivatedRoute,Router} from '@angular/router';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
-import {  ProductViewModel, searchModel } from 'src/app/model/appModel';
 import { OrderService } from 'src/app/Service/order.service';
 import { AuthService } from 'src/app/Service/auth.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Search } from 'src/app/model/classes/Search';
+import { ProductView } from 'src/app/model/interfaces/ProductView';
 
 
 
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 })
 export class MainComponent implements OnInit, OnDestroy {
 
-  search: searchModel;  
+  search: Search;  
   sliderProduct: any;
   isAuthenticated = false;
   private userSub: Subscription;
@@ -27,8 +28,6 @@ export class MainComponent implements OnInit, OnDestroy {
     center: true,
     dots: true,
     rtl:false,
-    // autoHeight: true,
-    // autoWidth: true,
     responsive: {
       0: {
         items: 1,
@@ -49,8 +48,6 @@ export class MainComponent implements OnInit, OnDestroy {
     nav:true,
     margin:30,
     navText : ['<div class="navi nxt">><div/>','<div class="navi prv"><>><div/>'],
-    // autoHeight: true,
-    // autoWidth: true,
     responsive: {
       0: {
         items: 1,
@@ -92,7 +89,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   getSliderProducts()
   {
-    let sliderSearch=new searchModel();
+    let sliderSearch=new Search();
     sliderSearch.sortBy=1;
     this.fetchData.filterProducts(sliderSearch).subscribe(products => {
       this.sliderProduct=products;            
@@ -104,7 +101,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.router.navigate(['/detail', id], { relativeTo: this.route });   
   }
 
-  addtoCard(product:ProductViewModel, id:string)
+  addtoCard(product:ProductView, id:string)
   {
     product.Id=id;    
     this.OrderServise.addToBasket(product);

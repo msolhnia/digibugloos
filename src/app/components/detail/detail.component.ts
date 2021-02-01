@@ -2,8 +2,10 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation, AfterViewChecked } fro
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Search } from 'src/app/model/classes/Search';
+import { Category } from 'src/app/model/interfaces/Category';
+import { ProductView } from 'src/app/model/interfaces/ProductView';
 import { AuthService } from 'src/app/Service/auth.service';
-import { CategoryModel, ProductViewModel, searchModel } from 'src/app/model/appModel';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 import { OrderService } from 'src/app/Service/order.service';
 
@@ -13,11 +15,11 @@ import { OrderService } from 'src/app/Service/order.service';
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
-  search: searchModel;
+  search: Search;
   product: any;
   sliderProduct: any;
   isloading=true;
-  category: CategoryModel;
+  category: Category;
   paramsSubscription: Subscription;
   isAuthenticated = false;
   private userSub: Subscription;
@@ -42,9 +44,8 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
   }
 
   constructor(private route: ActivatedRoute, private router: Router, public fetchData: FetchdataService,
-    private OrderServise:OrderService,    private authService: AuthService
-    ) {
-    this.search = new searchModel();
+    private OrderServise:OrderService,    private authService: AuthService) {
+    this.search = new Search();
   }
 
   ngOnInit(): void {
@@ -74,23 +75,24 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.fetchData.filterProducts(this.search).subscribe(product => {
       this.product = product[0];
       this.getCategory();
-      this.getSliderProducts(this.product.cat);
+      this.getSliderProducts(this.product.category);     
     }
     );
   }
 
   getCategory() {
-    this.fetchData.allCategory.subscribe(Categories => {
-      this.category = Categories.filter(cat => cat.Id == this.product.cat)[0];
+    this.fetchData.allCategory.subscribe(Categories => {     
+      this.category = Categories.filter(category => category.Id == this.product.category)[0];      
     }
     );
   }
 
-  getSliderProducts(catId: string) {
-    let sliderSearch = new searchModel();
-    sliderSearch.cat = Number(catId);
+  getSliderProducts(catId: string) {   
+    let sliderSearch = new Search();
+    sliderSearch.category = Number(catId);
     this.fetchData.filterProducts(sliderSearch).subscribe(products => {      
-      this.sliderProduct = products;      
+      this.sliderProduct = products;     
+      console.log(this.sliderProduct) ;
     }
     );
   }
@@ -104,12 +106,10 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.router.navigate(['/list', -1], { relativeTo: this.route });
   }
 
-  addtoCard(product:ProductViewModel)
+  addtoCard(product:ProductView)
   { 
     this.OrderServise.addToBasket(product);
   }
-
-
 
   ngAfterViewChecked()
   {

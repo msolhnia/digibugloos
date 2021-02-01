@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UserProfile } from 'src/app/model/classes/UserProfile';
 import { AuthService } from 'src/app/Service/auth.service';
-import { UserProfileModel } from 'src/app/model/appModel';
 import { Validation } from 'src/app/Service/validation.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { Validation } from 'src/app/Service/validation.service';
   styleUrls: ['./user-tab.component.css']
 })
 export class UserTabComponent implements OnInit {
-  UserProfile: UserProfileModel;
+  UserProfile: UserProfile;
   readonly: boolean = true;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -24,36 +24,25 @@ export class UserTabComponent implements OnInit {
     private http: HttpClient
   ) {
 
-    this.UserProfile = new UserProfileModel();
-  }
+    this.UserProfile = new UserProfile();
 
-  ngOnInit(): void {
-    this.authService.appProfile.subscribe(
-      UserProfile => {
-        if (UserProfile[0]) {
-          this.UserProfile = UserProfile[0];
+    this.authService.profile.subscribe
+    (
+      (profile) => 
+      {
+        if (profile[0]) {                  
+          this.UserProfile =profile[0];
         }
       }
     );
-    if (this.authService.appProfileStatic && this.authService.appProfileStatic[0]) {
-      this.UserProfile = this.authService.appProfileStatic[0];
-    }
+  }
+
+  ngOnInit(): void {
   }
 
 
   updateProfile() {
-    this.authService.appProfileStatic = this.UserProfile;
-    this.authService.updateProfile();
-
-
-    this.authService.appProfile.subscribe(
-      UserProfile => {
-        if (UserProfile[0]) {
-          this.UserProfile = UserProfile[0];
-        }
-      }
-    );
-
+    this.authService.updateProfile(this.UserProfile);
     this.openSnackBar("your profile updated successfuly", false);
     this.onEditmode();
   }
@@ -92,8 +81,6 @@ export class UserTabComponent implements OnInit {
     {
       isErrorState: (control: FormControl) => Validation.checkLimit(control, 20, 200)
     }
-
-
 
 
   emailErrorHandler =

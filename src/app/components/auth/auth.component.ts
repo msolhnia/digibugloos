@@ -3,12 +3,11 @@ import { Component } from '@angular/core';
 import { FormControl, NgModel, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-
 import { AuthService, AuthResponseData } from 'src/app/Service/auth.service';
-
 import { ViewChild } from '@angular/core';
 import { Validation } from 'src/app/Service/validation.service';
-import { UserProfileModel, loginModel } from 'src/app/model/appModel';
+import { UserProfile } from 'src/app/model/classes/UserProfile';
+import { Login } from 'src/app/model/classes/Login';
 
 
 @Component({
@@ -19,9 +18,9 @@ import { UserProfileModel, loginModel } from 'src/app/model/appModel';
 export class AuthComponent {
 
   error: string = null;
-  UserProfile: UserProfileModel;
-  login: loginModel;
-  signup: loginModel;
+  UserProfile: UserProfile;
+  login: Login;
+  signup: Login;
   inProgress: boolean;
   hide = true;
   confirm: NgModel;
@@ -34,21 +33,19 @@ export class AuthComponent {
     private authService: AuthService, private router: Router,
     private route: ActivatedRoute,    
     private http: HttpClient) {
-    this.login = new loginModel();
-    this.signup = new loginModel();
-    this.UserProfile = new UserProfileModel();
-
-
+    this.login = new Login();
+    this.signup = new Login();
+    this.UserProfile = new UserProfile();
   }
 
 
   onResetLoglin() {
-    this.login = new loginModel();
+    this.login = new Login();
   }
 
 
   onResetSignUp() {
-    this.UserProfile = new UserProfileModel();
+    this.UserProfile = new UserProfile();
   }
 
 

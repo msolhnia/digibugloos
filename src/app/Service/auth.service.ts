@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { throwError, BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
-import { loginModel, UserProfileModel ,User} from '../model/appModel';
 import { Observable } from 'rxjs/internal/Observable';
- 
+import { User } from '../model/classes/User';
+import { UserProfile } from '../model/classes/UserProfile';
+import { Login } from '../model/classes/Login';
 
 
 export interface AuthResponseData {
@@ -22,22 +23,22 @@ export interface AuthResponseData {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User>(null);
-  appProfile = new Subject<UserProfileModel>();
-  appProfileStatic: UserProfileModel;
+  profile = new BehaviorSubject<UserProfile>(null);
+  //appProfileStatic: UserProfile;
   username = new BehaviorSubject<string>("");
   private tokenExpirationTimer: any;
   isAuthenticated = new Subject<any>();
-  loadbasket= new BehaviorSubject<boolean>(false);
   appUser: any;
-  //, private orderService:OrderService
   constructor(private http: HttpClient, private router: Router) {
     this.user.subscribe(
       (user) => {
-        this.appUser = <User>user;
+        if(user !=null)
+        {
+          this.appUser = <User>user;
+        }                
       }
     )
   }
-
 
   //because fiebase doesn't accept '.' in url so we must replac '.' with anoher char
   correctUserName(originalEmail: string, Replace: boolean = true) {
@@ -48,7 +49,7 @@ export class AuthService {
     return username;
   }
 
-  signup(signup: loginModel, profile: UserProfileModel) {
+  signup(signup: Login, profile: UserProfile) {
     return this.http
       .post<AuthResponseData>
       (
@@ -60,17 +61,16 @@ export class AuthService {
         }
       )
       .subscribe(
-        (registerdata) => 
-        {
+        (registerdata) => {
           let username = this.correctUserName(signup.email);
           this.http.post('http://Users/' + username, profile).subscribe(
             (insertProfileData) => {
-              let mappedProfile = <UserProfileModel>insertProfileData;
-              this.appProfile.next(mappedProfile);
+              let mappedProfile = <UserProfile>insertProfileData;
+              this.profile.next(mappedProfile);
               this.loadProfile(registerdata.email).subscribe(
                 (profile) => {
-                  this.appProfile.next(profile);
-                  this.appProfileStatic = profile;
+                  this.profile.next(profile);
+                  //this.appProfileStatic = profile;
                 }
               );
             }
@@ -88,7 +88,7 @@ export class AuthService {
       );
   }
 
-  login(login: loginModel) {
+  login(login: Login) {
     return this.http
       .post<AuthResponseData>(
         'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBQut5WyfLdoriudf89QvCo3t4ZzkGFMyk',
@@ -111,22 +111,24 @@ export class AuthService {
 
           this.loadProfile(resData.email).subscribe(
             (profile) => {
-              this.appProfile.next(profile);
-              this.appProfileStatic = profile;
+              this.profile.next(profile);
+              //this.appProfileStatic = profile;
             }
           )
         })
       );
   }
 
-  updateProfile() {
-    let username = this.correctUserName((<User>this.appUser).email); 
+  updateProfile(userProfile:UserProfile) {
+    let username = this.correctUserName((<User>this.appUser).email);
     return this.http.delete('http://Users/' + username)
       .subscribe(
-        () => {          
-          this.http.post('http://Users/' + username, this.appProfileStatic).subscribe(
+        () => {
+          this.http.post('http://Users/' + username, userProfile).subscribe(
             (data) => {
-              this.appProfile.next(this.appProfileStatic)              
+              console.log("profile saved");
+              this.profile.next(userProfile);
+             // this.appProfile.next(this.appProfile);
             }
           )
         }
@@ -141,12 +143,12 @@ export class AuthService {
       _token: string;
       _tokenExpirationDate: string;
     } = JSON.parse(localStorage.getItem('userData'));
+
+
     if (!userData) {
-      this.logout();
-      return;
-    }
-    else {
-      this.isAuthenticated.next(true);
+      console.log("1");
+     this.logout();
+     return;
     }
 
     const loadedUser = new User(
@@ -157,69 +159,65 @@ export class AuthService {
     );
 
     if (loadedUser.token) {
-      this.user.next(loadedUser);
-      const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
-      this.autoLogout(expirationDuration);
-      //this.orderService.getBasket();
-      this.checkUnauthorized(loadedUser.email);
-      this.loadProfile(loadedUser.email).subscribe(
-        (profile) => {
-          this.appProfile.next(profile);
-          this.appProfileStatic = profile;
+      console.log("2");
+      this.loadProfile(loadedUser.email)
+      .subscribe(
+        (profile) => 
+        {    
+          console.log("3");      
+          this.profile.next(profile);
+          console.log(this.profile);
+          //this.appProfileStatic = profile;
+          this.user.next(loadedUser);
+          this.appUser=loadedUser;
+          const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+          this.autoLogout(expirationDuration);
+          this.isAuthenticated.next(true);
+        },
+        errorMessage => 
+        {
+          console.log("3");
+          this.logout();
+          this.isAuthenticated.next(false);
+          this.profile.next(null);
+          //this.appProfileStatic = null;
+          return;
         }
       )
     }
   }
 
-  public checkUnauthorized(userName: string) 
-  {
-    return this.http.get('http://Users/' +this.correctUserName(userName, true))
-    .subscribe(
-      (data)=>{ 
-        if(!data)
-        {
-          console.log(data) ;
-        this.isAuthenticated.next(false);
-        this.appProfile.next(null);
-        this.appProfileStatic=null;        
-        this.logout();
-      }
-      else
-      {
-        this.loadbasket.next(true);
-      }
-      }                               
-    );
-  }
-
   public loadProfile(userName: string): Observable<any> {
-    return this.http.get('http://Users/' + this.correctUserName(userName, true))
-      .pipe(
-       catchError(this.handleError)        
+    let username = this.correctUserName(userName);
+    return this.http
+    .get('https://digibugloos-default-rtdb.europe-west1.firebasedatabase.app/Users/'+username+".json")
+    .pipe(
+        catchError(this.handleError)
         ,
-        map(responseData => {         
-          const postsArray = [];
-          for (const key in responseData) {
-            if (responseData.hasOwnProperty(key)) {
-              postsArray.push({ ...responseData[key], id: key });
+        map(responseData => {
+            const postsArray = [];
+            for (const key in responseData) {
+                if (responseData.hasOwnProperty(key)) {
+                        postsArray.push({ ...responseData[key], id: key });                         
+                }
             }
-          }
-          return postsArray;
-        },
-        )
-      )
+            return postsArray;
+        })
+    );
+
   }
 
   logout() {
     this.user.next(null);
-    //this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
     this.tokenExpirationTimer = null;
     this.isAuthenticated.next(false);
-    this.appProfile.next(null);
+    this.profile.next(null);
+    this.appUser=null;
+    this.username.next("");
   }
 
   autoLogout(expirationDuration: number) {
@@ -241,10 +239,9 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  private handleError(errorRes: HttpErrorResponse) {
+  public handleError(errorRes: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     if (!errorRes.error || !errorRes.error.error) {
-      console.log("ddfdf");
       return throwError(errorMessage);
     }
     switch (errorRes.error.error) {
@@ -257,20 +254,12 @@ export class AuthService {
       case 'INVALID_PASSWORD':
         errorMessage = 'This password is not correct.';
         break;
-
       case 'unauthorized':
-        
         errorMessage = 'This login unauthorized';
         break;
-
-
       case 'Auth token is expired':
         errorMessage = 'please login again';
-       
         break;
-
-
-        
     }
     return throwError(errorMessage);
   }

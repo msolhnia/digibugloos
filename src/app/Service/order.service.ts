@@ -1,10 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 import { Subject } from "rxjs/internal/Subject";
-import { AuthService } from "../Service/auth.service"; 
-import { basketModel, orderModel, ProductViewModel,User } from "../model/appModel";
+import { Basket } from "../model/classes/Basket";
+import { Order } from "../model/classes/Order";
+import { User } from "../model/classes/User";
+import { ProductView } from "../model/interfaces/ProductView";
+import { AuthService } from "../Service/auth.service";
 import { FetchdataService } from './fetchdata.service'
 
 @Injectable({ providedIn: 'root' })
@@ -12,21 +15,35 @@ export class OrderService {
 
     horizontalPosition: MatSnackBarHorizontalPosition = 'right';
     verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-    basket: basketModel;//keep all items that added by user to bascket
-    basket2=new BehaviorSubject<any>(null);//keep all items that added by user to bascket
-    basketChanged = new Subject<any>();
+    basket: Basket;//keep all items that added by user to bascket
+    basketChanged = new ReplaySubject<any>();
     orders: Observable<any>;
 
     constructor(
-        private authService:AuthService,
-        private _snackBar: MatSnackBar, 
+        private authService: AuthService,
+        private _snackBar: MatSnackBar,
         private http: HttpClient,
         public fetchData: FetchdataService) {
-        this.basket = new basketModel();
+        this.basket = new Basket();
+
+        this.authService.isAuthenticated.subscribe(
+            (isAuthenticated) => {
+                if (isAuthenticated) 
+                {
+                    this.getBasket();
+                }
+                else
+                {
+                    this.basket.items = [];
+                    this.basketChanged.next(this.basket);
+                }
+            }
+        )
+
     }
 
-    openSnackBar(title: string, isAdded:boolean=true) {        
-        let message =  (isAdded)? " added to card!":"";
+    openSnackBar(title: string, isAdded: boolean = true) {
+        let message = (isAdded) ? " added to card!" : "";
         this._snackBar.open(title + message, "ok", {
             duration: 5000,
             horizontalPosition: this.horizontalPosition,
@@ -34,16 +51,17 @@ export class OrderService {
         });
     }
 
- 
+
+
     clearBasket() {
-        this.basket.items = [];
-        this.basketChanged.next(this.basket);  
-        this.saveBasket();      
-        this.openSnackBar("all item has been removed from basket!",false);
+        this.basket= new Basket();
+        this.basketChanged.next(this.basket);
+        this.saveBasket();
+        this.openSnackBar("all item has been removed from basket!", false);
     }
 
-    updateBasket(product: ProductViewModel) {
-        
+    updateBasket(product: ProductView) {
+
         let updateItem = this.basket.items.find(this.findIndexToUpdate, product.Id);
         let index = this.basket.items.indexOf(updateItem);
         this.basket.items[index].count = product.count;
@@ -55,9 +73,8 @@ export class OrderService {
         return newItem.Id === this;
     }
 
-    addToBasket(product: ProductViewModel) {
-       
-        if (this.basket.items != null && this.basket.items.filter(p => p.Id == product.Id).length) {
+    addToBasket(product: ProductView) {
+        if (this.basket != null && this.basket.items != null && this.basket.items.filter(p => p.Id == product.Id).length) {
             //Update if item exist 
             let item = this.basket.items.filter(p => p.Id == product.Id)[0];
             product.count = (Number(Number(item.count) + 1)).toString();
@@ -69,53 +86,60 @@ export class OrderService {
             this.basket.items.push(product);
             this.basketChanged.next(this.basket);
         }
-        this.openSnackBar(product.Title);
-        this.saveBasket();       
+        this.openSnackBar(product.title);
+        this.saveBasket();
     }
 
 
-    saveOrder(order:orderModel)
-    {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);         
-        this.http.post('http://Orders/'+username,
-        order
-        ).subscribe(
-            s => console.log(s)
+    saveOrder(order: Order) {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);        
+        this.http.post('http://Orders/' + username,
+            order
+        ).subscribe(           
+            s =>  {this.getOrders(username);}
         );
     }
 
 
-    getOrders():Observable<any>
+    getOrders(userName:string=""): Observable<any> 
     {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email); 
-        this.orders= this.fetchData.GetDataFromSever("Orders/"+username);
+        if(!userName.length)
+        {
+            userName = (<User>this.authService.appUser).email;
+        }
+
+        userName = this.authService.correctUserName((<User>this.authService.appUser).email);        
+        this.orders = this.fetchData.GetDataFromServer("Orders/" + userName);
         return this.orders;
     }
 
-    saveBasket()
-    {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);  
-        this.http.delete('http://Baskets/'+username
+    saveBasket() {        
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
+        this.http.delete('http://Baskets/' + username
         ).subscribe(
-            ()=>
-            {
-                this.http.post('http://Baskets/'+username, this.basket
+            () => {
+                this.http.post('http://Baskets/' + username, this.basket
                 ).subscribe(
                     s => console.log(s)
                 );
             }
-        );        
+        );
     }
 
-    getBasket() 
-    {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email); 
-        this.fetchData.GetDataFromSever("Baskets/"+username).subscribe
-        ((basket)=>{
-            this.basket=basket[0];   
-            this.basketChanged.next(this.basket);   
-            console.log( this.basket) ;     
-        });        
+    getBasket() {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);        
+        this.fetchData.GetDataFromServer("Baskets/" + username).subscribe
+            ((basket) => {
+                if (basket != null && basket != undefined && basket.length > 0) {
+                    this.basket = basket[0];
+                    this.basketChanged.next(this.basket);
+                }
+            }
+                ,
+                errorMessage => {                    
+                    this.authService.logout();
+                }
+            );
     }
 
 }

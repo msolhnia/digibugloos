@@ -1,58 +1,38 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, retry } from 'rxjs/operators';
-import { Observable, Subscription } from 'rxjs';
-import { CategoryModel, ProductModel, searchModel } from '../model/appModel';
-
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Search } from '../model/classes/Search';
+import { AuthService } from "../Service/auth.service"; 
 
 @Injectable()
 export class FetchdataService {
   
-    allProducts: Observable<any> = this.GetDataFromSever("Product"); //get all products from server       
-    allCategory: Observable<any> = this.GetDataFromSever("Category"); //get all Categories from server       
+    allProducts: Observable<any> = this.GetDataFromServer("Product"); //get all products from server       
+    allCategory: Observable<any> = this.GetDataFromServer("Category"); //get all Categories from server       
     
-    constructor(private http: HttpClient) {           
+    constructor(private http: HttpClient,  private authService:AuthService,) {           
     }
 
     public refreshProduct() {
-        this.allProducts = this.GetDataFromSever("Product");
+        this.allProducts = this.GetDataFromServer("Product");
     }
 
-    public filterProducts(search:searchModel)
+    public filterProducts(search:Search)
     {     
        return this.allProducts.pipe( 
             map(products => {
-               return products.filter(d => (search.id == "" || d.id == search.id) && (search.cat == -1 || d.cat == search.cat));           
+               return products.filter(d => (search.id == "" || d.id == search.id) && (search.category == -1 || d.category == search.category));           
             })                        
         );                
     } 
 
-    public SaveProduct(title: string, Body: string, imgUrl: string, price: string, cat: string, count: string) {
-        let Product: ProductModel = { Title: title, Body: Body, imgUrl: imgUrl, price: price, cat: cat, count: count, Createdate: new Date() };
-        this.http.post('http://Product.json',
-            Product
-        ).subscribe(
-            // s => console.log(s)
-        );
-    }
 
- 
-
-    public saveCategory(id:number,title: string, Description: string) {
-        let Category: CategoryModel = { Id: id, Title: title, Description: Description };
-        this.http.post('http://Category.json',
-            Category
-        ).subscribe(
-            // s => console.log(s)
-        );
-    }
-
-
-    public GetDataFromSever(table:string): Observable<any> {        
+    public GetDataFromServer(table:string): Observable<any> {        
         return this.http
             .get('http://'+table)
             .pipe(
+                catchError(this.authService.handleError),
                 map(responseData => {
                     const postsArray = [];
                     for (const key in responseData) {
@@ -64,5 +44,4 @@ export class FetchdataService {
                 })
             );
     }
-
 }

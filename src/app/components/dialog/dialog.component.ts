@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { orderModel, orderViewModel, searchModel } from 'src/app/model/appModel';
+import { OrderView } from 'src/app/model/classes/OrderView';
+import { Search } from 'src/app/model/classes/Search';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 
 @Component({
@@ -9,15 +10,15 @@ import { FetchdataService } from 'src/app/Service/fetchdata.service';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.css']
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent{
 isloading:Boolean=true;
   productList: any;
-  search: searchModel;
-  orderList: orderViewModel;
+  search: Search;
+  orderList: OrderView;
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,private dialogRef: MatDialogRef<DialogComponent>, public fetchData: FetchdataService) {
 
-    this.orderList = new orderViewModel();
-    this.search= new searchModel();
+    this.orderList = new OrderView();
+    this.search= new Search();
     if (data) {
       this.orderList = data.list || this.orderList;
       let idList: string[] = [];
@@ -33,16 +34,4 @@ isloading:Boolean=true;
     }
 
   }
-
-
-  ngOnInit(): void {
-
-
-
-  }
-  onConfirmClick(): void {
-    //this.dialogRef.close(this.FieldList);    
-  }
-
-
 }

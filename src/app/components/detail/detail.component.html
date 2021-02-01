@@ -7,25 +7,25 @@
             Products
         </li>
         <li (click)="onCatClick()">
-            <span>{{category.Title}}</span>
+            <span>{{category.title}}</span>
         </li>
-        <li>{{product.Title}}</li>
+        <li>{{product.title}}</li>
     </ul>
 
     <mat-grid-list class="product" cols="2" rowHeight="80px">
         <mat-grid-tile colspan="1" rowspan="5" style="position: relative;">
             <app-loader [isloading]="isloading"></app-loader>
             <div class="img_box">
-                <img class="img" src="{{product.imgUrl}}" alt="{{product.Title}}" title="{{product.Title}}">
+                <img class="img" src="{{product.imageUrl}}" alt="{{product.title}}" title="{{product.title}}">
             </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
             <div class="q">product name</div>
-            <div class="v">{{product.Title}}</div>
+            <div class="v">{{product.title}}</div>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
             <div class="q">Category</div>
-            <div class="v">{{category.Title}}</div>
+            <div class="v">{{category.title}}</div>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
             <div class="q">Price</div>
@@ -41,7 +41,7 @@
     </mat-grid-list>
     <div style="position: relative;">
         <app-loader [isloading]="isloading"></app-loader>
-        <div [innerHTML]="product.Body" class="body_text">
+        <div [innerHTML]="product.body" class="body_text">
         </div>
     </div>
 
@@ -53,9 +53,9 @@
             <ng-container>
                 <ng-template *ngFor="let item of sliderProduct" class="sale_item" carouselSlide>
                     <div (click)="goToProduct(item.id)" class="sliderImgBox">
-                        <img src="{{item.imgUrl}}" />
+                        <img src="{{item.imageUrl}}" />
                     </div>
-                    <div class="title">{{item.Title}}</div>
+                    <div class="title">{{item.title}}</div>
                     <div class="price">Price: {{item.price}}$</div>
                     <button [disabled]="!isAuthenticated" mat-raised-button color="accent" class="add_card" (click)="addtoCard(item)">add to cart</button>
                 </ng-template>

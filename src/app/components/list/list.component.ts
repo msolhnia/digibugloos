@@ -1,8 +1,9 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Search } from 'src/app/model/classes/Search';
+import { ProductView } from 'src/app/model/interfaces/ProductView';
 import { AuthService } from 'src/app/Service/auth.service';
-import { ProductViewModel, searchModel } from 'src/app/model/appModel';
 import { FetchdataService } from 'src/app/Service/fetchdata.service';
 import { OrderService } from 'src/app/Service/order.service';
  
@@ -15,7 +16,7 @@ export class ListComponent implements OnInit, OnDestroy{
   config: any;
   productList: any;
   cetegoryList: any;
-  search: searchModel;
+  search: Search;
   paramsSubscription:Subscription;
   isAuthenticated = false;
   private userSub: Subscription;
@@ -27,7 +28,7 @@ export class ListComponent implements OnInit, OnDestroy{
       itemsPerPage: 10
     };
 
-    this.search = new searchModel();    
+    this.search = new Search();    
     
     if(route.firstChild)
     {
@@ -35,7 +36,7 @@ export class ListComponent implements OnInit, OnDestroy{
         let id = +params['id'];
         if(id)
         {
-          this.search.cat= Number(id) ; 
+          this.search.category= Number(id) ; 
           this.getProducts();                               
         }        
       });
@@ -65,7 +66,7 @@ export class ListComponent implements OnInit, OnDestroy{
   }
 
   selectCategory(id: number) {
-    this.search.cat = id;
+    this.search.category = id;
     this.getProducts();
   } 
 
@@ -119,7 +120,7 @@ export class ListComponent implements OnInit, OnDestroy{
     });
   }
 
-  addtoCard(product:ProductViewModel, id:string)
+  addtoCard(product:ProductView, id:string)
   {
     product.Id=id;    
     this.OrderServise.addToBasket(product);

@@ -57,9 +57,9 @@
                 <ng-container>
                     <ng-template *ngFor="let item of sliderProduct" class="sale_item" carouselSlide>
                         <div (click)="goToProduct(item.id)" class="sliderImgBox">
-                            <img src="{{item.imgUrl}}" />
+                            <img src="{{item.imageUrl}}" />
                         </div>
-                        <div class="title">{{item.Title}}</div>
+                        <div class="title">{{item.title}}</div>
                         <div class="price">Price: {{item.price}}$</div>
 
                         <button [disabled]="!isAuthenticated" mat-raised-button color="accent" class="add_card" (click)="addtoCard(item,item.id)">add to cart</button>
