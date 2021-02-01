@@ -48,12 +48,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       console.log("fire");  
       console.log(this.isAuthenticated);  
 
-      if (!this.isAuthenticated) { this.profile = null; console.log("this appProfile is null");   }
+      if (!this.isAuthenticated) { this.profile = null;  }
     });
 
     this.authService.isAuthenticated.subscribe(a => {
       this.isAuthenticated = a;
-      if (!this.isAuthenticated) { this.profile = null; console.log("this appProfile is null");   }
+      if (!this.isAuthenticated) { this.profile = null;  }
     });
 
     this.profileSub = this.authService.profile.subscribe(profile => {           

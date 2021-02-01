@@ -139,7 +139,6 @@ export class AuthService {
 
 
     if (!userData) {
-      console.log("1");
      this.logout();
      return;
     }
@@ -152,7 +151,6 @@ export class AuthService {
     );
 
     if (loadedUser.token) {
-      console.log("2");
       this.loadProfile(loadedUser.email)
       .subscribe(
         (profile) => 
@@ -160,7 +158,6 @@ export class AuthService {
           console.log("profile loaded");      
           this.profile.next(profile);console.log(profile);
           this.usernameSubject.next(loadedUser.email);
-          //this.appProfileStatic = profile;
           this.user.next(loadedUser);
           this.appUser=loadedUser;
           const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
@@ -169,11 +166,9 @@ export class AuthService {
         },
         errorMessage => 
         {
-          console.log("3");
           this.logout();
           this.isAuthenticated.next(false);
           this.profile.next(null);
-          //this.appProfileStatic = null;
           return;
         }
       )

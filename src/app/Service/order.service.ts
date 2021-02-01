@@ -95,9 +95,7 @@ export class OrderService {
             order
         ).subscribe(
             (orders) => {
-                console.log("save order----->");
                 this.orders.push(order);
-                console.log(this.orders);
                 this.getOrders();  
             }
         );
@@ -106,14 +104,13 @@ export class OrderService {
 
     getOrders() {
         let username = this.authService.correctUserName((<User>this.authService.appUser).email);
-        this.fetchData.GetDataFromServer("Orders/" + username)
+        this.fetchData.getDataFromServer("Orders/" + username)
             .subscribe
             (
                 (orders) => {
                     if (orders != null && orders != undefined && orders.length > 0) {
                         this.orders = orders;
                         this.orderChanged.next(orders);
-                        console.log(orders);
                     }
                 }
                 ,
@@ -126,19 +123,13 @@ export class OrderService {
     saveBasket() {
         let username = this.authService.correctUserName((<User>this.authService.appUser).email);
         this.http.delete('http://Baskets/' + username
-        ).subscribe(
-            () => {
-                this.http.post('http://Baskets/' + username, this.basket
-                ).subscribe(
-                    s => console.log(s)
-                );
-            }
+        ).subscribe( () => {this.http.post('http://Baskets/' + username, this.basket).subscribe(); }
         );
     }
 
     getBasket() {
         let username = this.authService.correctUserName((<User>this.authService.appUser).email);
-        this.fetchData.GetDataFromServer("Baskets/" + username).subscribe
+        this.fetchData.getDataFromServer("Baskets/" + username).subscribe
             ((basket) => {
                 if (basket != null && basket != undefined && basket.length > 0) {
                     this.basket = basket[0];

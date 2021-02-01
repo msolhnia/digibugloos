@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Search } from '../Model/Search';
@@ -8,14 +8,14 @@ import { AuthService } from "./auth.service";
 @Injectable()
 export class FetchdataService {
   
-    allProducts: Observable<any> = this.GetDataFromServer("Product"); //get all products from server       
-    allCategory: Observable<any> = this.GetDataFromServer("Category"); //get all Categories from server       
+    allProducts: Observable<any> = this.getDataFromServer("Product"); //get all products from server       
+    allCategory: Observable<any> = this.getDataFromServer("Category"); //get all Categories from server       
     
     constructor(private http: HttpClient,  private authService:AuthService,) {           
     }
 
     public refreshProduct() {
-        this.allProducts = this.GetDataFromServer("Product");
+        this.allProducts = this.getDataFromServer("Product");
     }
 
     public filterProducts(search:Search)
@@ -28,7 +28,7 @@ export class FetchdataService {
     } 
 
 
-    public GetDataFromServer(table:string): Observable<any> {        
+    public getDataFromServer(table:string): Observable<any> {        
         return this.http
             .get('http://'+table)
             .pipe(

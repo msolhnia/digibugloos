@@ -77,7 +77,6 @@ var DetailComponent = /** @class */ (function () {
         sliderSearch.category = Number(catId);
         this.fetchData.filterProducts(sliderSearch).subscribe(function (products) {
             _this.sliderProduct = products;
-            console.log(_this.sliderProduct);
         });
     };
     DetailComponent.prototype.goToProduct = function (id) {
