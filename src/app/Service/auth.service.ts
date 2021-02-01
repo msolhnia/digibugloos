@@ -8,27 +8,21 @@ import { Observable } from 'rxjs/internal/Observable';
 import { User } from '../model/classes/User';
 import { UserProfile } from '../model/classes/UserProfile';
 import { Login } from '../model/classes/Login';
+import { AuthResponseData } from '../model/interfaces/AuthResponseData';
 
-
-export interface AuthResponseData {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
-}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   user = new BehaviorSubject<User>(null);
-  profile = new BehaviorSubject<UserProfile>(null);
-  //appProfileStatic: UserProfile;
+  profile = new BehaviorSubject<UserProfile>(null); 
   username = new BehaviorSubject<string>("");
+  usernameSubject=new Subject<any>();
   private tokenExpirationTimer: any;
   isAuthenticated = new Subject<any>();
   appUser: any;
+  
+
   constructor(private http: HttpClient, private router: Router) {
     this.user.subscribe(
       (user) => {
@@ -126,7 +120,6 @@ export class AuthService {
         () => {
           this.http.post('http://Users/' + username, userProfile).subscribe(
             (data) => {
-              console.log("profile saved");
               this.profile.next(userProfile);
              // this.appProfile.next(this.appProfile);
             }
@@ -164,9 +157,9 @@ export class AuthService {
       .subscribe(
         (profile) => 
         {    
-          console.log("3");      
-          this.profile.next(profile);
-          console.log(this.profile);
+          console.log("profile loaded");      
+          this.profile.next(profile);console.log(profile);
+          this.usernameSubject.next(loadedUser.email);
           //this.appProfileStatic = profile;
           this.user.next(loadedUser);
           this.appUser=loadedUser;

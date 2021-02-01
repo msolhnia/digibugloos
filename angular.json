@@ -25,7 +25,7 @@
             ],
             "styles": [
               "./node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
-              "./node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css",             
+              "./node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "digibugloos"
+  "defaultProject": "digibugloos",
+  "cli": {
+    "analytics": "dcfa0c5c-fe44-4696-828a-28d52c9e551b"
+  }
 }

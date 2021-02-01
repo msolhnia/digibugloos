@@ -26,13 +26,31 @@ export class UserTabComponent implements OnInit {
 
     this.UserProfile = new UserProfile();
 
+    //load profile when navigate to this page
     this.authService.profile.subscribe
     (
       (profile) => 
-      {
-        if (profile[0]) {                  
+      {  
+        if (profile && profile[0]) {                  
           this.UserProfile =profile[0];
         }
+      }
+    );
+
+    //load profile when redirect to this page
+    this.authService.usernameSubject.subscribe
+    (
+      (usernameSubject) => 
+      {
+        this.authService.loadProfile(usernameSubject).subscribe
+        (
+          (profile) => 
+          {  
+            if (profile && profile[0]) {                  
+              this.UserProfile =profile[0];
+            }
+          }
+        )        
       }
     );
   }
@@ -87,11 +105,4 @@ export class UserTabComponent implements OnInit {
     {
       isErrorState: (control: FormControl) => Validation.checkEmail(control)
     }
-
-
-
-
-
-
-
 }

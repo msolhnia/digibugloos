@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { FormControl, NgModel, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService, AuthResponseData } from 'src/app/Service/auth.service';
+import { AuthService} from 'src/app/Service/auth.service';
 import { ViewChild } from '@angular/core';
 import { Validation } from 'src/app/Service/validation.service';
 import { UserProfile } from 'src/app/model/classes/UserProfile';
 import { Login } from 'src/app/model/classes/Login';
+import { AuthResponseData } from 'src/app/model/interfaces/AuthResponseData';
 
 
 @Component({
@@ -37,7 +38,6 @@ export class AuthComponent {
     this.signup = new Login();
     this.UserProfile = new UserProfile();
   }
-
 
   onResetLoglin() {
     this.login = new Login();

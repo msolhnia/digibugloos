@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from "@angular/material/snack-bar";
-import { Observable, ReplaySubject } from "rxjs";
-import { Subject } from "rxjs/internal/Subject";
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from "rxjs";
 import { Basket } from "../model/classes/Basket";
 import { Order } from "../model/classes/Order";
 import { User } from "../model/classes/User";
@@ -16,24 +15,23 @@ export class OrderService {
     horizontalPosition: MatSnackBarHorizontalPosition = 'right';
     verticalPosition: MatSnackBarVerticalPosition = 'bottom';
     basket: Basket;//keep all items that added by user to bascket
-    basketChanged = new ReplaySubject<any>();
-    orders: Observable<any>;
-
+    basketChanged = new BehaviorSubject<any>(null);
+    orders: Order[] = [];
+    orderChanged = new Subject<any>();
     constructor(
         private authService: AuthService,
         private _snackBar: MatSnackBar,
         private http: HttpClient,
         public fetchData: FetchdataService) {
         this.basket = new Basket();
-
+         
         this.authService.isAuthenticated.subscribe(
             (isAuthenticated) => {
-                if (isAuthenticated) 
-                {
+                if (isAuthenticated) {
                     this.getBasket();
+                    this.getOrders();
                 }
-                else
-                {
+                else {
                     this.basket.items = [];
                     this.basketChanged.next(this.basket);
                 }
@@ -54,7 +52,7 @@ export class OrderService {
 
 
     clearBasket() {
-        this.basket= new Basket();
+        this.basket = new Basket();
         this.basketChanged.next(this.basket);
         this.saveBasket();
         this.openSnackBar("all item has been removed from basket!", false);
@@ -92,28 +90,40 @@ export class OrderService {
 
 
     saveOrder(order: Order) {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);        
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
         this.http.post('http://Orders/' + username,
             order
-        ).subscribe(           
-            s =>  {this.getOrders(username);}
+        ).subscribe(
+            (orders) => {
+                console.log("save order----->");
+                this.orders.push(order);
+                console.log(this.orders);
+                this.getOrders();  
+            }
         );
     }
 
 
-    getOrders(userName:string=""): Observable<any> 
-    {
-        if(!userName.length)
-        {
-            userName = (<User>this.authService.appUser).email;
-        }
-
-        userName = this.authService.correctUserName((<User>this.authService.appUser).email);        
-        this.orders = this.fetchData.GetDataFromServer("Orders/" + userName);
-        return this.orders;
+    getOrders() {
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
+        this.fetchData.GetDataFromServer("Orders/" + username)
+            .subscribe
+            (
+                (orders) => {
+                    if (orders != null && orders != undefined && orders.length > 0) {
+                        this.orders = orders;
+                        this.orderChanged.next(orders);
+                        console.log(orders);
+                    }
+                }
+                ,
+                errorMessage => {
+                    this.authService.logout();
+                }
+            );
     }
 
-    saveBasket() {        
+    saveBasket() {
         let username = this.authService.correctUserName((<User>this.authService.appUser).email);
         this.http.delete('http://Baskets/' + username
         ).subscribe(
@@ -127,7 +137,7 @@ export class OrderService {
     }
 
     getBasket() {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);        
+        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
         this.fetchData.GetDataFromServer("Baskets/" + username).subscribe
             ((basket) => {
                 if (basket != null && basket != undefined && basket.length > 0) {
@@ -136,7 +146,7 @@ export class OrderService {
                 }
             }
                 ,
-                errorMessage => {                    
+                errorMessage => {
                     this.authService.logout();
                 }
             );
