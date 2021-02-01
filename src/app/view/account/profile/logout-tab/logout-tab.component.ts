@@ -6,15 +6,10 @@ import { AuthService } from 'src/app/service/auth.service';
   templateUrl: './logout-tab.component.html',
   styleUrls: ['./logout-tab.component.css']
 })
-export class LogoutTabComponent implements OnInit {
+export class LogoutTabComponent {
 
-  constructor( private authService: AuthService) {
-
-   }
-
-  ngOnInit(): void {
-  }
-
+  constructor( private authService: AuthService) { }
+  
   logOut()
   {
     this.authService.logout();

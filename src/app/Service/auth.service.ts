@@ -106,7 +106,6 @@ export class AuthService {
           this.loadProfile(resData.email).subscribe(
             (profile) => {
               this.profile.next(profile);
-              //this.appProfileStatic = profile;
             }
           )
         })
@@ -121,7 +120,6 @@ export class AuthService {
           this.http.post('http://Users/' + username, userProfile).subscribe(
             (data) => {
               this.profile.next(userProfile);
-             // this.appProfile.next(this.appProfile);
             }
           )
         }
@@ -154,9 +152,8 @@ export class AuthService {
       this.loadProfile(loadedUser.email)
       .subscribe(
         (profile) => 
-        {    
-          console.log("profile loaded");      
-          this.profile.next(profile);console.log(profile);
+        {         
+          this.profile.next(profile);
           this.usernameSubject.next(loadedUser.email);
           this.user.next(loadedUser);
           this.appUser=loadedUser;

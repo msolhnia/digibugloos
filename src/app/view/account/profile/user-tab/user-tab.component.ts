@@ -12,7 +12,7 @@ import { Validation } from 'src/app/validation/validation.service';
   templateUrl: './user-tab.component.html',
   styleUrls: ['./user-tab.component.css']
 })
-export class UserTabComponent implements OnInit {
+export class UserTabComponent {
   UserProfile: UserProfile;
   readonly: boolean = true;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
@@ -53,9 +53,6 @@ export class UserTabComponent implements OnInit {
         )        
       }
     );
-  }
-
-  ngOnInit(): void {
   }
 
 

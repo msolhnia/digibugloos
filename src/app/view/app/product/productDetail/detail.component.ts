@@ -92,7 +92,6 @@ export class DetailComponent implements OnInit, AfterViewChecked,OnDestroy {
     sliderSearch.category = Number(catId);
     this.fetchData.filterProducts(sliderSearch).subscribe(products => {      
       this.sliderProduct = products;     
-      console.log(this.sliderProduct) ;
     }
     );
   }

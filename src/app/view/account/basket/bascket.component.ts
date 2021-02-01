@@ -27,7 +27,6 @@ export class BascketComponent {
 
 
   onOpenOrder() {
-    console.log("order");
     this.router.navigate(['/confirmorder'], { relativeTo: this.route });
   }
 

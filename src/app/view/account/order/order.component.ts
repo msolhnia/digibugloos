@@ -38,7 +38,7 @@ export class OrderComponent implements OnInit {
 
 
   saveOrder() {
-    //clear nuused data, we dont need to save body(description) of a product in basket 
+    //clear unused data, we dont need to save body(description) of a product in basket 
     this.order.items=this.basket.items.map((item)=> {item.body=""; return item;});
     this.order.price = this.getTotalCost(this.basket.items);
     this.order.status = OrderStatus.received;    
