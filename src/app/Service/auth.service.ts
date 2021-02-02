@@ -62,8 +62,7 @@ export class authService {
               this.profile.next(mappedProfile);
               this.loadProfile(registerdata.email).subscribe(
                 (profile) => {
-                  this.profile.next(profile);
-                  //this.appProfileStatic = profile;
+                  this.profile.next(profile);                 
                 }
               );
             }

@@ -95,18 +95,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/list', id], { relativeTo: this.route });
   }
 
-
-  openProfile()
-  {
-    //this.router.navigate(['/profile'], { relativeTo: this.route });
-    this.redirectTo('/profile');
-  }
-
-  redirectTo(uri:string){
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-    this.router.navigate([uri]));
- }
-
   logout() {
     this.authService.logout();
     this.userSub.unsubscribe();
