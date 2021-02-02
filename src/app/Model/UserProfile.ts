@@ -1,5 +1,5 @@
 export class UserProfile {        
-    email:string;  // or usename                   
+    email:string;  // or username                   
     name: string; // first name
     lastName:string;       
     birthDay:Date; 

@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import { ProductView } from "../Interface/ProductView";
 import { Basket } from "../Model/Basket";
-import { User } from "../Model/User";
 import { alertService } from "./alert.service";
 import { authService } from "./auth.service";
 import { fetchDataService } from "./fetchData.service";
@@ -54,26 +53,32 @@ export class basketService
     
 
     saveBasket() {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
-        this.http.delete('http://Baskets/' + username
-        ).subscribe( () => {this.http.post('http://Baskets/' + username, this.basket).subscribe(); }
-        );
+        this.authService.profile.subscribe(
+            profie => {
+                let username = this.authService.correctUserName(profie[0].originalName);
+                this.http.delete('http://Baskets/' + username
+                ).subscribe( () => {this.http.post('http://Baskets/' + username, this.basket).subscribe(); }
+                );
+            })
     }
 
     getBasket() {
-        let username = this.authService.correctUserName((<User>this.authService.appUser).email);
-        this.fetchData.getDataFromServer("Baskets/" + username).subscribe
-            ((basket) => {
-                if (basket != null && basket != undefined && basket.length > 0) {
-                    this.basket = basket[0];
-                    this.basketChanged.next(this.basket);
-                }
-            }
-                ,
-                errorMessage => {
-                    this.authService.logout();
-                }
-            );
+        this.authService.profile.subscribe(
+            profie => {
+                let username = this.authService.correctUserName(profie[0].originalName);
+                this.fetchData.getDataFromServer("Baskets/" + username).subscribe
+                    ((basket) => {
+                        if (basket != null && basket != undefined && basket.length > 0) {
+                            this.basket = basket[0];
+                            this.basketChanged.next(this.basket);
+                        }
+                    }
+                        ,
+                        errorMessage => {
+                            this.authService.logout();
+                        }
+                    );
+            })
     }
 
     clearBasket() {

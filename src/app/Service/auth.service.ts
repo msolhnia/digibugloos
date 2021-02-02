@@ -16,28 +16,25 @@ export class authService {
   user = new BehaviorSubject<User>(null);
   profile = new BehaviorSubject<UserProfile>(null); 
   username = new BehaviorSubject<string>("");
-  usernameSubject=new Subject<any>();
-  private tokenExpirationTimer: any;
+  usernameSubject=new Subject<any>();  
   isAuthenticated = new Subject<any>();
-  appUser: any;
-  
+  tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.user.subscribe(
-      (user) => {
-        if(user !=null)
-        {
-          this.appUser = <User>user;
-        }                
-      }
-    )
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   //because fiebase doesn't accept '.' in url so we must replac '.' with anoher char
   correctUserName(originalEmail: string, Replace: boolean = true) {
-    let username = originalEmail.slice(0, originalEmail.indexOf('@'));
+if(originalEmail==undefined) return;
+    let username:string=originalEmail;
+   if(username.length>0 && username.indexOf('@')!=-1)
+   {
+    username = originalEmail.slice(0, originalEmail.indexOf('@'));
+   }
+    
     if (Replace) {
+      
       username = username.replace('.', '_');
+      
     }
     return username;
   }
@@ -111,7 +108,8 @@ export class authService {
   }
 
   updateProfile(userProfile:UserProfile) {
-    let username = this.correctUserName((<User>this.appUser).email);
+
+    let username = this.correctUserName(userProfile.originalName);
     return this.http.delete('http://Users/' + username)
       .subscribe(
         () => {
@@ -122,6 +120,7 @@ export class authService {
           )
         }
       );
+
   }
 
 
@@ -154,7 +153,6 @@ export class authService {
           this.profile.next(profile);
           this.usernameSubject.next(loadedUser.email);
           this.user.next(loadedUser);
-          this.appUser=loadedUser;
           const expirationDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
           this.autoLogout(expirationDuration);
           this.isAuthenticated.next(true);
@@ -199,7 +197,6 @@ export class authService {
     this.tokenExpirationTimer = null;
     this.isAuthenticated.next(false);
     this.profile.next(null);
-    this.appUser=null;
     this.username.next("");
   }
 

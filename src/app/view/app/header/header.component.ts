@@ -11,6 +11,7 @@ import { fetchDataService } from 'src/app/service/fetchData.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
+
 export class HeaderComponent implements OnInit, OnDestroy {
   cetegoryList: any;//
   badgeHidden: boolean = true;
@@ -18,9 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   private userSub: Subscription;
   private profileSub: Subscription;
-
   profile: UserProfile;
-
 
   constructor(public fetchData: fetchDataService,
     private basketService: basketService,
@@ -32,6 +31,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    //update badge
     this.basketService.basketChanged.subscribe(basket => {
       if (basket != null && basket.items != null && basket.items.length > 0) {
         this.badgeCount = basket.items.length;
@@ -42,37 +43,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
 
-
+    //to detemine which menu must load (user profile or login page)
     this.userSub = this.authService.user.subscribe(user => {
-      this.isAuthenticated = !!user; 
-
-      if (!this.isAuthenticated) { this.profile = null;  }
+      this.isAuthenticated = !!user;
+      if (!this.isAuthenticated) { this.profile = null; }
     });
 
     this.authService.isAuthenticated.subscribe(isAuthenticated => {
       this.isAuthenticated = isAuthenticated;
-      if (!this.isAuthenticated) { this.profile = null;  }
+      if (!this.isAuthenticated) { this.profile = null; }
     });
 
-    this.profileSub = this.authService.profile.subscribe(profile => {           
-      if(profile!=null)
-      {        
-        if(!<UserProfile>profile[0])
-        {
-          this.profile=profile;
+
+    //update profile name after login/signup and editProfile --->with refresh
+    this.profileSub = this.authService.profile.subscribe(profile => {
+      if (profile != null) {
+        if (!<UserProfile>profile[0]) {
+          this.profile = profile;
         }
-        else
-        {
+        else {
           this.profile = <UserProfile>profile[0];
         }
-      }      
+      }
     });
 
+    //update profile name after login/signup and editProfile --->with navigate
     this.authService.username.subscribe(
       username => {
         if (username.length) {
           this.profileSub = this.authService.loadProfile(username).subscribe(appProfile => {
-            this.profile = appProfile[0]; 
+            this.profile = appProfile[0];
           });
         }
       })
@@ -104,6 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   prepareLogIn() {
     this.router.navigate(['/auth'], { relativeTo: this.route });
   }
+
   goHome() {
     this.router.navigate(['/'], { relativeTo: this.route });
   }
