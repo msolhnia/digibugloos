@@ -17,8 +17,8 @@ import { authService } from 'src/app/service/auth.service';
 })
 export class OrdersTabComponent {
   displayedColumns: string[] = ['price', 'products', 'description', 'status', 'View'];
-  orders: Order[] = [];
-  orderViews: OrderView[] = [];
+  orders: Order[] = [];// original order model
+  orderViews: OrderView[] = [];// custom model of order to show in table
 
   @ViewChild('MatPaginator') paginator: MatPaginator;
   dataSource: any;
