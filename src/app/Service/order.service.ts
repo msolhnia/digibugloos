@@ -25,8 +25,8 @@ export class orderService {
 
     saveOrder(order: Order) {        
         this.authService.profile.subscribe(
-            profie => {
-                let username = this.authService.correctUserName(profie.originalName);
+            profile => {
+                let username = this.authService.correctUserName(profile.originalName);
                 this.http.post('http://Orders/' + username,
                     order
                 ).subscribe(
@@ -43,9 +43,8 @@ export class orderService {
     getOrders() {
 
         this.authService.profile.subscribe(
-            profie => {
-                console.log(profie);
-                let username = this.authService.correctUserName(profie[0].originalName);
+            profile => {
+                let username = this.authService.correctUserName(profile[0].originalName);
              
                 this.fetchData.getDataFromServer("Orders/" + username)
                 .subscribe

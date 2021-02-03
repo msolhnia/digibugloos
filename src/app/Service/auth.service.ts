@@ -22,20 +22,13 @@ export class authService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  //because fiebase doesn't accept '.' in url so we must replac '.' with anoher char
+  //because fiebase doesn't accept '.' in url so we must replac '.' with '_' char
   correctUserName(originalEmail: string, Replace: boolean = true) {
 if(originalEmail==undefined) return;
     let username:string=originalEmail;
    if(username.length>0 && username.indexOf('@')!=-1)
-   {
-    username = originalEmail.slice(0, originalEmail.indexOf('@'));
-   }
-    
-    if (Replace) {
-      
-      username = username.replace('.', '_');
-      
-    }
+   {username = originalEmail.slice(0, originalEmail.indexOf('@'));}    
+    if(Replace) { username = username.replace('.', '_'); }
     return username;
   }
 

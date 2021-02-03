@@ -54,8 +54,8 @@ export class basketService
 
     saveBasket() {
         this.authService.profile.subscribe(
-            profie => {
-                let username = this.authService.correctUserName(profie[0].originalName);
+            profile => {
+                let username = this.authService.correctUserName(profile[0].originalName);
                 this.http.delete('http://Baskets/' + username
                 ).subscribe( () => {this.http.post('http://Baskets/' + username, this.basket).subscribe(); }
                 );
@@ -64,8 +64,8 @@ export class basketService
 
     getBasket() {
         this.authService.profile.subscribe(
-            profie => {
-                let username = this.authService.correctUserName(profie[0].originalName);
+            profile => {
+                let username = this.authService.correctUserName(profile[0].originalName);
                 this.fetchData.getDataFromServer("Baskets/" + username).subscribe
                     ((basket) => {
                         if (basket != null && basket != undefined && basket.length > 0) {
