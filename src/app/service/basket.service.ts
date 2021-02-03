@@ -65,19 +65,22 @@ export class basketService
     getBasket() {
         this.authService.profile.subscribe(
             profile => {
-                let username = this.authService.correctUserName(profile[0].originalName);
-                this.fetchData.getDataFromServer("Baskets/" + username).subscribe
-                    ((basket) => {
-                        if (basket != null && basket != undefined && basket.length > 0) {
-                            this.basket = basket[0];
-                            this.basketChanged.next(this.basket);
+                if(profile && profile[0])
+                {
+                    let username = this.authService.correctUserName(profile[0].originalName);
+                    this.fetchData.getDataFromServer("Baskets/" + username).subscribe
+                        ((basket) => {
+                            if (basket != null && basket != undefined && basket.length > 0) {
+                                this.basket = basket[0];
+                                this.basketChanged.next(this.basket);
+                            }
                         }
-                    }
-                        ,
-                        errorMessage => {
-                            this.authService.logout();
-                        }
-                    );
+                            ,
+                            errorMessage => {
+                                this.authService.logout();
+                            }
+                        );
+                }
             })
     }
 

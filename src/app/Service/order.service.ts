@@ -44,22 +44,25 @@ export class orderService {
 
         this.authService.profile.subscribe(
             profile => {
-                let username = this.authService.correctUserName(profile[0].originalName);
-             
-                this.fetchData.getDataFromServer("Orders/" + username)
-                .subscribe
-                (
-                    (orders) => {
-                        if (orders != null && orders != undefined && orders.length > 0) {
-                            this.orders = orders;
-                            this.orderChanged.next(orders);
+                if(profile && profile[0])
+                {
+                    let username = this.authService.correctUserName(profile[0].originalName); 
+                    this.fetchData.getDataFromServer("Orders/" + username)
+                    .subscribe
+                    (
+                        (orders) => {
+                            if (orders != null && orders != undefined && orders.length > 0) {
+                                this.orders = orders;
+                                this.orderChanged.next(orders);
+                            }
                         }
-                    }
-                    ,
-                    errorMessage => {
-                        this.authService.logout();
-                    }
-                );
+                        ,
+                        errorMessage => {
+                            this.authService.logout();
+                        }
+                    );
+                }
+                           
             })
     }
 }
